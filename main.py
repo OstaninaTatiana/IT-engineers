@@ -15,15 +15,15 @@ class MyWidget(QtWidgets.QMainWindow):
 
     def create_presentation(self):
         print('Hello')
-        self.presantation = Presentation()
-        title_slide_layout = self.presantation.slide_layouts[0]
-        slide = self.presantation.slides.add_slide(title_slide_layout)
+        self.presentation = Presentation()
+        title_slide_layout = self.presentation.slide_layouts[0]
+        slide = self.presentation.slides.add_slide(title_slide_layout)
         title = slide.shapes.title
         subtitle = slide.placeholders[1]
 
         title.text = "Hello, World!"
         subtitle.text = "Презентация создана"
-        self.presantation.save('Презентация1.pptx')
+        self.presentation.save('Презентация1.pptx')
 
 
 if __name__ == '__main__':

@@ -1,8 +1,10 @@
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets, QtGui
 from PyQt5.QtWidgets import QPushButton
 import sys
 from pptx import Presentation
 from PyQt5 import uic
+from PyQt5.QtWidgets import QFileDialog
+from PyQt5.QtWidgets import QMessageBox
 
 
 class Greeting_window(QtWidgets.QMainWindow):
@@ -35,20 +37,23 @@ class Greeting_window(QtWidgets.QMainWindow):
 class Choose_template(QtWidgets.QMainWindow):
     def __init__(self, slides):
         super().__init__()
-        #uic.loadUi('Greeting window.ui', self)
         self.initUI()
 
     def initUI(self):
-        print(1)
-        self.setGeometry(300, 300, 900, 900)
-        self.setWindowTitle('---')
-        self.pushButton = QPushButton('Привет', self)
-        self.pushButton.move(50, 50)
+        self.setGeometry(100, 30, 1100, 900)
+        self.setWindowTitle('Презентация')
+
+        self.pushButton = QPushButton('Готово', self)
+        self.pushButton.setGeometry(20, 850, 90, 40)
+        font = QtGui.QFont()
+        font.setPointSize(18)
+        self.pushButton.setFont(font)
         self.pushButton.clicked.connect(self.create_presentation)
         self.pushButton.show()
 
     def create_presentation(self):
-        print('180')
+        file_name = QFileDialog.getOpenFileName(self, 'Open a file', 'C://')
+        QMessageBox.information(self, '..', file_name)
 
 
 if __name__ == '__main__':

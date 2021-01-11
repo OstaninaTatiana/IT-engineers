@@ -1,4 +1,4 @@
-from PyQt5 import QtWidgets, QtGui
+from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtWidgets import QPushButton
 import sys
 from pptx import Presentation
@@ -10,12 +10,26 @@ from PyQt5.QtWidgets import QMessageBox
 class Greeting_window(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
-        uic.loadUi('Greeting_window.ui', self)
         self.initUI()
 
     def initUI(self):
+        self.setGeometry(100, 30, 1100, 900)
         self.setWindowTitle('Презентация')
+
+        self.pushButton = QPushButton(self)
+        self.pushButton.setText('Создать презентацию')
+        font = QtGui.QFont()
+        font.setPointSize(28)
+        self.pushButton.setFont(font)
+        self.pushButton.setGeometry(190, 600, 720, 80)
         self.pushButton.clicked.connect(self.create_presentation)
+
+        self.label = QtWidgets.QLabel(self)
+        self.label.setGeometry(QtCore.QRect(185, 300, 800, 111))
+        self.label.setText('Добро пожаловать!')
+        font = QtGui.QFont()
+        font.setPointSize(60)
+        self.label.setFont(font)
 
     def create_presentation(self):
         self.k = Choose_template([])

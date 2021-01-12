@@ -3,8 +3,7 @@ from PyQt5.QtWidgets import QPushButton
 import sys
 from pptx import Presentation
 from PyQt5 import uic
-from PyQt5.QtWidgets import QFileDialog
-from PyQt5.QtWidgets import QMessageBox
+from  PyQt5.QtGui import QPainter, QColor
 
 
 class Greeting_window(QtWidgets.QMainWindow):
@@ -32,7 +31,7 @@ class Greeting_window(QtWidgets.QMainWindow):
         self.label.setFont(font)
 
     def create_presentation(self):
-        self.k = Choose_template([])
+        self.k = Main_screen([])
         self.k.show()
         self.hide()
 
@@ -48,9 +47,10 @@ class Greeting_window(QtWidgets.QMainWindow):
         #self.presentation.save('Презентация1.pptx')
 
 
-class Choose_template(QtWidgets.QMainWindow):
+class Main_screen(QtWidgets.QMainWindow):
     def __init__(self, slides):
         super().__init__()
+        self.slides = slides
         self.initUI()
 
     def initUI(self):
@@ -65,9 +65,18 @@ class Choose_template(QtWidgets.QMainWindow):
         self.pushButton.clicked.connect(self.create_presentation)
         self.pushButton.show()
 
+    def paintEvent(self, event):
+        self.qp = QPainter()
+        self.qp.begin(self)
+        self.draw(event, self.qp)
+        self.qp.end()
+
+    def draw(self, event, qp):
+        qp.setPen(QColor(0, 0, 0))
+        qp.drawRect(0, 0, 200, 900)
+
     def create_presentation(self):
-        file_name = QFileDialog.getOpenFileName(self, 'Open a file', 'C://')
-        QMessageBox.information(self, '..', file_name)
+        print(1)
 
 
 if __name__ == '__main__':

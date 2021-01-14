@@ -1,12 +1,28 @@
-from PyQt5 import QtWidgets, QtGui, QtCore
+from PyQt5 import Qt, QtWidgets, QtGui, QtCore
 from PyQt5.QtWidgets import QPushButton
 import sys
 from pptx import Presentation
-from PyQt5 import uic
 from  PyQt5.QtGui import QPainter, QColor
 
 
-class Greeting_window(QtWidgets.QMainWindow):
+class Slide():
+    def __init__(self, type, title='', text='', picture=''):
+        self.type = type
+        self.text = text
+        self.title = title
+        self.picture = picture
+
+    def set_text(self, text):
+        self.text = text
+
+    def set_title(self, text):
+        self.title = text
+
+    def set_picture(self, picture):
+        self.picture = picture
+
+
+class GreetingWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
         self.initUI()
@@ -31,7 +47,7 @@ class Greeting_window(QtWidgets.QMainWindow):
         self.label.setFont(font)
 
     def create_presentation(self):
-        self.k = Main_screen([])
+        self.k = MainScreen([Slide(111, title='Привет')])
         self.k.show()
         self.hide()
 
@@ -47,10 +63,11 @@ class Greeting_window(QtWidgets.QMainWindow):
         #self.presentation.save('Презентация1.pptx')
 
 
-class Main_screen(QtWidgets.QMainWindow):
+class MainScreen(QtWidgets.QMainWindow):
     def __init__(self, slides):
         super().__init__()
         self.slides = slides
+        self.number_of_slides = len(self.slides)
         self.initUI()
 
     def initUI(self):
@@ -64,6 +81,37 @@ class Main_screen(QtWidgets.QMainWindow):
         self.pushButton.setFont(font)
         self.pushButton.clicked.connect(self.create_presentation)
         self.pushButton.show()
+
+        layout = Qt.QGridLayout(self)
+
+        for i in range(self.number_of_slides):
+            x = QtWidgets.QPushButton(self)
+            x.setGeometry(10, 70*i, 160, 100)
+            font = QtGui.QFont()
+            font.setPointSize(14)
+            x.setFont(font)
+            x.setMaximumSize(160, 100)
+            x.setMinimumSize(160, 100)
+            x.setText(self.slides[i].title)
+            layout.addWidget(x, i, 0)
+
+        x = QtWidgets.QPushButton(self)
+        x.setGeometry(10, 70*self.number_of_slides, 160, 100)
+        font = QtGui.QFont()
+        font.setPointSize(50)
+        x.setFont(font)
+        x.setMaximumSize(160, 100)
+        x.setMinimumSize(160, 100)
+        x.setText('+')
+        layout.addWidget(x, self.number_of_slides, 0)
+
+        w = Qt.QWidget(self)
+        w.setLayout(layout)
+
+        mw = Qt.QScrollArea(self)
+        mw.setWidget(w)
+        mw.resize(200, 830)
+        mw.show()
 
     def paintEvent(self, event):
         self.qp = QPainter()
@@ -81,6 +129,6 @@ class Main_screen(QtWidgets.QMainWindow):
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
-    ex = Greeting_window()
+    ex = GreetingWindow()
     ex.show()
     sys.exit(app.exec())

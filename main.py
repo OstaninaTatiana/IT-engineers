@@ -154,7 +154,6 @@ class MainScreen(QtWidgets.QMainWindow):
         mw.show()
 
 
-
     def paintEvent(self, event):
         self.qp = QPainter()
         self.qp.begin(self)
@@ -190,11 +189,14 @@ class ChooseTemplate(MainScreen):
         tmp1 = QPushButton("1 template", self)
         tmp1.setGeometry(300, 200, 200, 100)
         tmp1.clicked.connect(self.to_template1)
+
         tmp2 = QPushButton("2 template", self)
         tmp2.setGeometry(750, 200, 200, 100)
         tmp2.clicked.connect(self.to_template2)
+
         tmp3 = QPushButton("3 template", self)
         tmp3.setGeometry(300, 650, 200, 100)
+
         tmp4 = QPushButton("4 template", self)
         tmp4.setGeometry(750, 650, 200, 100)
 
@@ -241,6 +243,16 @@ class Template1(MainScreen):
 
         self.create_new_slide.clicked.connect(self.new_slide)
 
+    def paintEvent(self, event):
+        self.border = QPainter()
+        self.border.begin(self)
+        self.draw(event, self.border)
+        self.border.end()
+
+    def draw(self, event, border):
+        border.setPen(QColor(0, 0, 0))
+        border.drawRect(250, 100, 800, 700)
+
     def new_slide(self):
         self.slides[self.number_of_slide].set_title(self.print_title.toPlainText())
         self.slides[self.number_of_slide].set_text(self.print_text.toPlainText())
@@ -280,6 +292,16 @@ class Template2(MainScreen):
         self.print_text.setGeometry(300, 350, 700, 400)
 
         self.create_new_slide.clicked.connect(self.new_slide)
+
+    def paintEvent(self, event):
+        self.border = QPainter()
+        self.border.begin(self)
+        self.draw(event, self.border)
+        self.border.end()
+
+    def draw(self, event, border):
+        border.setPen(QColor(0, 0, 0))
+        border.drawRect(250, 100, 800, 700)
 
     def new_slide(self):
         self.slides[self.number_of_slide].set_title(self.print_title.toPlainText())

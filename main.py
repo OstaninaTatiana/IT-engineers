@@ -1,7 +1,7 @@
 from PyQt5 import Qt, QtWidgets, QtGui, QtCore
 from PyQt5.QtWidgets import QPushButton
 import sys
-from  PyQt5.QtGui import QPainter, QColor
+from PyQt5.QtGui import QPainter, QColor
 
 
 class Slide():
@@ -56,7 +56,7 @@ class GreetingWindow(QtWidgets.QMainWindow):
         self.label.adjustSize() #???
 
     def create_presentation(self):
-        self.k = ChooseTemplate([Slide(111, title='Привет')])
+        self.k = ChooseTemplate([])
         self.k.show()
         self.hide()
 
@@ -102,6 +102,8 @@ class MainScreen(QtWidgets.QMainWindow):
 
         layout = Qt.QGridLayout(self)
 
+        self.list_of_buttons = []
+
         for i in range(self.number_of_slides):
             x = QtWidgets.QPushButton(self)
             x.setGeometry(10, 70*i, 160, 100)
@@ -120,11 +122,12 @@ class MainScreen(QtWidgets.QMainWindow):
             x.setMaximumSize(160, 100)
             x.setMinimumSize(160, 100)
             x.setText(self.slides[i].title)
+            self.list_of_buttons.append(x)
             layout.addWidget(x, i, 0)
 
-        x = QtWidgets.QPushButton(self)
-        x.setGeometry(10, 70*self.number_of_slides, 160, 100)
-        x.setStyleSheet('''QPushButton {
+        self.create_new_slide = QtWidgets.QPushButton(self)
+        self.create_new_slide.setGeometry(10, 70*self.number_of_slides, 160, 100)
+        self.create_new_slide.setStyleSheet('''QPushButton {
                                     background: rgb(95,193,215);
                                     border-style: outset;
                                     border-width: 2px;
@@ -135,11 +138,11 @@ class MainScreen(QtWidgets.QMainWindow):
                                 }''')
         font = QtGui.QFont()
         font.setPointSize(50)
-        x.setFont(font)
-        x.setMaximumSize(160, 100)
-        x.setMinimumSize(160, 100)
-        x.setText('+')
-        layout.addWidget(x, self.number_of_slides, 0)
+        self.create_new_slide.setFont(font)
+        self.create_new_slide.setMaximumSize(160, 100)
+        self.create_new_slide.setMinimumSize(160, 100)
+        self.create_new_slide.setText('+')
+        layout.addWidget(self.create_new_slide, self.number_of_slides, 0)
 
         w = Qt.QWidget(self)
         w.setLayout(layout)
@@ -149,6 +152,8 @@ class MainScreen(QtWidgets.QMainWindow):
         mw.setStyleSheet('background: rgb(95,193,215);')
         mw.resize(200, 830)
         mw.show()
+
+
 
     def paintEvent(self, event):
         self.qp = QPainter()
@@ -163,12 +168,16 @@ class MainScreen(QtWidgets.QMainWindow):
     def create_presentation(self):
         print(1)
 
+
 class ChooseTemplate(MainScreen):
     def __init__(self, slides):
         super().__init__(slides)
         self.tempinit()
 
     def tempinit(self):
+        for i in self.list_of_buttons:
+            i.clicked.connect(self.to_slide)
+
         self.label = QtWidgets.QLabel(self)
         self.label.setGeometry(QtCore.QRect(250, 50, 300, 70))
         self.label.setText('Выберите макет слайда')
@@ -180,13 +189,119 @@ class ChooseTemplate(MainScreen):
 
         tmp1 = QPushButton("1 template", self)
         tmp1.setGeometry(300, 200, 200, 100)
+        tmp1.clicked.connect(self.to_template1)
         tmp2 = QPushButton("2 template", self)
         tmp2.setGeometry(750, 200, 200, 100)
+        tmp2.clicked.connect(self.to_template2)
         tmp3 = QPushButton("3 template", self)
         tmp3.setGeometry(300, 650, 200, 100)
         tmp4 = QPushButton("4 template", self)
         tmp4.setGeometry(750, 650, 200, 100)
 
+    def to_template1(self):
+        self.slides.append(Slide(1))
+        self.a = Template1(self.slides, len(self.slides) - 1)
+        self.a.show()
+        self.hide()
+
+    def to_template2(self):
+        self.slides.append(Slide(2))
+        self.a = Template2(self.slides, len(self.slides) - 1)
+        self.a.show()
+        self.hide()
+
+    def to_slide(self):
+        sender = self.sender()
+        i = self.list_of_buttons.index(sender)
+        slide = self.slides[i]
+        print(i)
+        print(slide.type)
+        if slide.type == 1:
+            self.a = Template1(self.slides, i)
+        elif slide.type == 2:
+            self.a = Template2(self.slides, i)
+        self.a.show()
+        self.hide()
+
+
+class Template1(MainScreen):
+    def __init__(self, slides, number_of_slide):
+        super().__init__(slides)
+        self.number_of_slide = number_of_slide
+        self.tempinit(number_of_slide)
+        for i in self.list_of_buttons:
+            i.clicked.connect(self.to_slide)
+
+    def tempinit(self, number_of_slide):
+        self.print_title = QtWidgets.QPlainTextEdit(self.slides[number_of_slide].title, self)
+        self.print_title.setGeometry(300, 150, 700,  250)
+
+        self.print_text = QtWidgets.QPlainTextEdit(self.slides[number_of_slide].text, self)
+        self.print_text.setGeometry(300, 450, 700, 200)
+
+        self.create_new_slide.clicked.connect(self.new_slide)
+
+    def new_slide(self):
+        self.slides[self.number_of_slide].set_title(self.print_title.toPlainText())
+        self.slides[self.number_of_slide].set_text(self.print_text.toPlainText())
+        self.a = ChooseTemplate(self.slides)
+        self.a.show()
+        self.hide()
+
+    def to_slide(self):
+        self.slides[self.number_of_slide].set_title(self.print_title.toPlainText())
+        self.slides[self.number_of_slide].set_text(self.print_text.toPlainText())
+        sender = self.sender()
+        i = self.list_of_buttons.index(sender)
+        slide = self.slides[i]
+        print(i)
+        print(slide.type)
+        if slide.type == 1:
+            self.a = Template1(self.slides, i)
+        elif slide.type == 2:
+            self.a = Template2(self.slides, i)
+        self.a.show()
+        self.hide()
+
+
+class Template2(MainScreen):
+    def __init__(self, slides, number_of_slide):
+        super().__init__(slides)
+        self.number_of_slide = number_of_slide
+        self.tempinit(number_of_slide)
+        for i in self.list_of_buttons:
+            i.clicked.connect(self.to_slide)
+
+    def tempinit(self, number_of_slide):
+        self.print_title = QtWidgets.QPlainTextEdit(self.slides[number_of_slide].title, self)
+        self.print_title.setGeometry(300, 150, 700,  150)
+
+        self.print_text = QtWidgets.QPlainTextEdit(self.slides[number_of_slide].text, self)
+        self.print_text.setGeometry(300, 350, 700, 400)
+
+        self.create_new_slide.clicked.connect(self.new_slide)
+
+    def new_slide(self):
+        self.slides[self.number_of_slide].set_title(self.print_title.toPlainText())
+        self.slides[self.number_of_slide].set_text(self.print_text.toPlainText())
+        self.a = ChooseTemplate(self.slides)
+        self.a.show()
+        self.hide()
+
+    def to_slide(self):
+        self.slides[self.number_of_slide].set_title(self.print_title.toPlainText())
+        self.slides[self.number_of_slide].set_text(self.print_text.toPlainText())
+        sender = self.sender()
+        i = self.list_of_buttons.index(sender)
+        slide = self.slides[i]
+        print(i)
+        print(slide.type)
+        if slide.type == 1:
+            self.a = Template1(self.slides, i)
+        elif slide.type == 2:
+            self.a = Template2(self.slides, i)
+        self.a.show()
+        self.hide()
 
 
 if __name__ == '__main__':

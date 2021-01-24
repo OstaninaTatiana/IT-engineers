@@ -1,7 +1,8 @@
 from PyQt5 import Qt, QtWidgets, QtGui, QtCore
+from PyQt5.QtCore import QSize
 from PyQt5.QtWidgets import QPushButton
 import sys
-from PyQt5.QtGui import QPainter, QColor
+from PyQt5.QtGui import QPainter, QColor, QIcon
 
 
 class Slide():
@@ -86,11 +87,11 @@ class MainScreen(QtWidgets.QMainWindow):
         self.pushButton = QPushButton('Готово', self)
         self.pushButton.setGeometry(20, 850, 90, 40)
         self.pushButton.setStyleSheet('''QPushButton {            
-                                    background: rgb(184,232,176);
+                                    background: rgb(13,174,78);
                                     border-style: outset;
-                                    border-width: 2px;
+                                    border-width: px;
                                     border-radius: 15px;
-                                    border-color: rgb(49,106,60) ;
+                                    border-color: rgb(49,106,60);
                                     padding: 4px;
                                     color: rgb(255, 255, 255);
                                 }''')   # параметры кнопки
@@ -127,15 +128,15 @@ class MainScreen(QtWidgets.QMainWindow):
 
         self.create_new_slide = QtWidgets.QPushButton(self)
         self.create_new_slide.setGeometry(10, 70*self.number_of_slides, 160, 100)
-        self.create_new_slide.setStyleSheet('''QPushButton {
+        self.create_new_slide.setStyleSheet('''QPushButton {      
                                     background: rgb(95,193,215);
                                     border-style: outset;
                                     border-width: 2px;
                                     border-radius: 25px;
-                                    border-color: white ;
                                     padding: 4px;
                                     color: rgb(255, 255, 255);
-                                }''')
+                                }''')  #border-style: outset;border-width: 2px;border-radius: 25px;padding: 4px;(параметры для границы(обводки))
+
         font = QtGui.QFont()
         font.setPointSize(50)
         self.create_new_slide.setFont(font)
@@ -186,19 +187,27 @@ class ChooseTemplate(MainScreen):
         self.label.setStyleSheet("color: rgb(184,232,176);")
         self.label.adjustSize()
 
-        tmp1 = QPushButton("1 template", self)
-        tmp1.setGeometry(300, 200, 200, 100)
+        tmp1 = QPushButton("", self)
+        tmp1.setGeometry(225, 200, 400, 300)
+        tmp1.setIcon(QIcon('1.jpg'))
+        tmp1.setIconSize(QSize(400, 300))
         tmp1.clicked.connect(self.to_template1)
 
-        tmp2 = QPushButton("2 template", self)
-        tmp2.setGeometry(750, 200, 200, 100)
+        tmp2 = QPushButton("", self)
+        tmp2.setGeometry(675, 200, 400, 300)
+        tmp2.setIcon(QIcon('слайд2.jpg'))
+        tmp2.setIconSize(QSize(400, 300))
         tmp2.clicked.connect(self.to_template2)
 
-        tmp3 = QPushButton("3 template", self)
-        tmp3.setGeometry(300, 650, 200, 100)
+        tmp3 = QPushButton("", self)
+        tmp3.setGeometry(225, 550, 400, 300)
+        tmp3.setIcon(QIcon('слайд3.jpg'))
+        tmp3.setIconSize(QSize(400, 300))
 
-        tmp4 = QPushButton("4 template", self)
-        tmp4.setGeometry(750, 650, 200, 100)
+        tmp4 = QPushButton("", self)
+        tmp4.setGeometry(675, 550, 400, 300)
+        tmp4.setIcon(QIcon('слайд4.jpg'))
+        tmp4.setIconSize(QSize(400, 300))
 
     def to_template1(self):
         self.slides.append(Slide(1))
@@ -250,8 +259,9 @@ class Template1(MainScreen):
         self.border.end()
 
     def draw(self, event, border):
-        border.setPen(QColor(0, 0, 0))
-        border.drawRect(250, 100, 800, 700)
+        border.setBrush(QColor(184, 232, 176))
+        border.setPen(QColor(184, 232, 176))
+        border.drawRoundedRect(250, 100, 800, 700, 50, 50)
 
     def new_slide(self):
         self.slides[self.number_of_slide].set_title(self.print_title.toPlainText())
@@ -300,8 +310,9 @@ class Template2(MainScreen):
         self.border.end()
 
     def draw(self, event, border):
-        border.setPen(QColor(0, 0, 0))
-        border.drawRect(250, 100, 800, 700)
+        border.setBrush(QColor(184, 232, 176))
+        border.setPen(QColor(184, 232, 176))
+        border.drawRoundedRect(250, 100, 800, 700, 50, 50)
 
     def new_slide(self):
         self.slides[self.number_of_slide].set_title(self.print_title.toPlainText())

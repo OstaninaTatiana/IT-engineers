@@ -23,11 +23,14 @@ class Slide():
 
 
 class GreetingWindow(QtWidgets.QMainWindow):
+    resized = QtCore.pyqtSignal()
+
     def __init__(self):
         super().__init__()
         self.initUI()
 
     def initUI(self):
+        self.resized.connect(self.resizing)
         self.setGeometry(100, 30, 1100, 900)
         self.setWindowTitle('Презентация')
 
@@ -37,7 +40,6 @@ class GreetingWindow(QtWidgets.QMainWindow):
         font.setFamily('comic sans ms')  # меняет тип шрифта
         font.setPointSize(28)
         self.pushButton.setFont(font)
-        self.pushButton.setGeometry(190, 500, 720, 300)
         self.pushButton.setStyleSheet(('''QPushButton {            
                                     background: rgb(184,232,176);
                                     position: absolute;
@@ -48,7 +50,6 @@ class GreetingWindow(QtWidgets.QMainWindow):
         self.pushButton.clicked.connect(self.create_presentation)
 
         self.label = QtWidgets.QLabel(self)
-        self.label.setGeometry(QtCore.QRect(185, 300, 800, 111))
         self.label.setText('Добро пожаловать!')
         font = QtGui.QFont()
         font.setPointSize(200)
@@ -71,6 +72,18 @@ class GreetingWindow(QtWidgets.QMainWindow):
         #title.text = "Hello, World!"
         #subtitle.text = "Презентация создана"
         #self.presentation.save('Презентация1.pptx')
+
+    def resizing(self):
+        print(1)
+        self.pushButton.setGeometry(int(0.1606 * self.width()),
+                                    int(0.5625 * self.height()),
+                                    int(0.6569 * self.width()),
+                                    int(0.3304 * self.height()))
+        self.label.setGeometry(int(0.2 * self.width()), int(0.3482 * self.height()), int(0.6 * self.width()), int(0.1 * self.height()))
+
+    def resizeEvent(self, event):
+        self.resized.emit()
+        return super().resizeEvent(event)
 
 
 class MainScreen(QtWidgets.QMainWindow):

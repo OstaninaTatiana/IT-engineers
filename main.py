@@ -79,7 +79,10 @@ class GreetingWindow(QtWidgets.QMainWindow):
                                     int(0.5625 * self.height()),
                                     int(0.6569 * self.width()),
                                     int(0.3304 * self.height()))
-        self.label.setGeometry(int(0.2 * self.width()), int(0.3482 * self.height()), int(0.6 * self.width()), int(0.1 * self.height()))
+        self.label.setGeometry(int(0.2 * self.width()),
+                               int(0.3482 * self.height()),
+                               int(0.6 * self.width()),
+                               int(0.1 * self.height()))
 
     def resizeEvent(self, event):
         self.resized.emit()
@@ -87,6 +90,8 @@ class GreetingWindow(QtWidgets.QMainWindow):
 
 
 class MainScreen(QtWidgets.QMainWindow):
+    resized = QtCore.pyqtSignal()
+
     def __init__(self, slides):
         super().__init__()
         self.slides = slides
@@ -94,11 +99,11 @@ class MainScreen(QtWidgets.QMainWindow):
         self.initUI()
 
     def initUI(self):
+        self.resized.connect(self.resizing)
         self.setGeometry(100, 30, 1100, 900)
         self.setWindowTitle('Презентация')
 
         self.pushButton = QPushButton('Готово', self)
-        self.pushButton.setGeometry(20, 850, 90, 40)
         self.pushButton.setStyleSheet('''QPushButton {            
                                     background: rgb(13,174,78);
                                     border-style: outset;
@@ -120,7 +125,7 @@ class MainScreen(QtWidgets.QMainWindow):
 
         for i in range(self.number_of_slides):
             x = QtWidgets.QPushButton(self)
-            x.setGeometry(10, 70*i, 160, 100)
+            x.setGeometry(int(0.0089 * self.width()), int(0.078 * i * self.height()), int(0.1387 * self.width()), int(0.1078 * self.height()))
             x.setStyleSheet('''QPushButton {
                                     background: rgb(95,193,215);
                                     border-style: outset;
@@ -133,14 +138,14 @@ class MainScreen(QtWidgets.QMainWindow):
             font = QtGui.QFont()
             font.setPointSize(14)
             x.setFont(font)
-            x.setMaximumSize(160, 100)
-            x.setMinimumSize(160, 100)
+            x.setMaximumSize(int(0.1387 * self.width()), int(0.1078 * self.height()))
+            x.setMinimumSize(int(0.1387 * self.width()), int(0.1078 * self.height()))
             x.setText(self.slides[i].title)
             self.list_of_buttons.append(x)
             layout.addWidget(x, i, 0)
 
         self.create_new_slide = QtWidgets.QPushButton(self)
-        self.create_new_slide.setGeometry(10, 70*self.number_of_slides, 160, 100)
+        self.create_new_slide.setGeometry(int(0.0089 * self.width()), int(0.078 * self.number_of_slides * self.height()), int(0.1387 * self.width()), int(0.1078 * self.height()))
         self.create_new_slide.setStyleSheet('''QPushButton {      
                                     background: rgb(95,193,215);
                                     border-style: outset;
@@ -153,19 +158,18 @@ class MainScreen(QtWidgets.QMainWindow):
         font = QtGui.QFont()
         font.setPointSize(50)
         self.create_new_slide.setFont(font)
-        self.create_new_slide.setMaximumSize(160, 100)
-        self.create_new_slide.setMinimumSize(160, 100)
+        self.create_new_slide.setMaximumSize(int(0.1387 * self.width()), int(0.1078 * self.height()))
+        self.create_new_slide.setMinimumSize(int(0.1387 * self.width()), int(0.1078 * self.height()))
         self.create_new_slide.setText('+')
         layout.addWidget(self.create_new_slide, self.number_of_slides, 0)
 
         w = Qt.QWidget(self)
         w.setLayout(layout)
 
-        mw = Qt.QScrollArea(self)
-        mw.setWidget(w)
-        mw.setStyleSheet('background: rgb(95,193,215);')
-        mw.resize(200, 830)
-        mw.show()
+        self.mw = Qt.QScrollArea(self)
+        self.mw.setWidget(w)
+        self.mw.setStyleSheet('background: rgb(95,193,215);')
+        self.mw.setGeometry(0, 0, int(0.1825 * self.width()), int(0.9196 * self.height()))
 
 
     def paintEvent(self, event):
@@ -176,10 +180,21 @@ class MainScreen(QtWidgets.QMainWindow):
 
     def draw(self, event, qp):
         qp.setPen(QColor(0, 0, 0))
-        qp.drawRect(0, 0, 200, 900)
+        qp.drawRect(0, 0, int(0.1825 * self.width()), int(1 * self.height()))
 
     def create_presentation(self):
         print(1)
+
+    def resizing(self):
+        self.pushButton.setGeometry(int(0.0182 * self.width()),
+                                    int(0.9374 * self.height()),
+                                    int(0.0803 * self.width()),
+                                    int(0.0357 * self.height()))
+        self.mw.resize(int(0.1825 * self.width()), int(0.9196 * self.height()))
+
+    def resizeEvent(self, event):
+        self.resized.emit()
+        return super().resizeEvent(event)
 
 
 class ChooseTemplate(MainScreen):

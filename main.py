@@ -31,7 +31,7 @@ class GreetingWindow(QtWidgets.QMainWindow):
 
     def initUI(self):
         self.resized.connect(self.resizing)
-        self.setGeometry(100, 30, 1100, 900)
+        self.resize(1100, 900)
         self.setWindowTitle('Презентация')
 
         self.pushButton = QPushButton(self)
@@ -58,7 +58,7 @@ class GreetingWindow(QtWidgets.QMainWindow):
         self.label.adjustSize() #???
 
     def create_presentation(self):
-        self.k = ChooseTemplate([])
+        self.k = ChooseTemplate([], (self.width(), self.height()))
         self.k.show()
         self.hide()
 
@@ -92,7 +92,8 @@ class GreetingWindow(QtWidgets.QMainWindow):
 class MainScreen(QtWidgets.QMainWindow):
     resized = QtCore.pyqtSignal()
 
-    def __init__(self, slides):
+    def __init__(self, slides, size):
+        self.size_of_window = size
         super().__init__()
         self.slides = slides
         self.number_of_slides = len(self.slides)
@@ -100,7 +101,8 @@ class MainScreen(QtWidgets.QMainWindow):
 
     def initUI(self):
         self.resized.connect(self.resizing)
-        self.setGeometry(100, 30, 1100, 900)
+        print(1243564234)
+        self.resize(*self.size_of_window)
         self.setWindowTitle('Презентация')
 
         self.pushButton = QPushButton('Готово', self)
@@ -198,8 +200,8 @@ class MainScreen(QtWidgets.QMainWindow):
 
 
 class ChooseTemplate(MainScreen):
-    def __init__(self, slides):
-        super().__init__(slides)
+    def __init__(self, slides, size):
+        super().__init__(slides, size)
         self.tempinit()
 
     def tempinit(self):
@@ -239,13 +241,13 @@ class ChooseTemplate(MainScreen):
 
     def to_template1(self):
         self.slides.append(Slide(1))
-        self.a = Template1(self.slides, len(self.slides) - 1)
+        self.a = Template1(self.slides, len(self.slides) - 1, (self.width(), self.height()))
         self.a.show()
         self.hide()
 
     def to_template2(self):
         self.slides.append(Slide(2))
-        self.a = Template2(self.slides, len(self.slides) - 1)
+        self.a = Template2(self.slides, len(self.slides) - 1, (self.width(), self.height()))
         self.a.show()
         self.hide()
 
@@ -256,16 +258,16 @@ class ChooseTemplate(MainScreen):
         print(i)
         print(slide.type)
         if slide.type == 1:
-            self.a = Template1(self.slides, i)
+            self.a = Template1(self.slides, i, (self.width(), self.height()))
         elif slide.type == 2:
-            self.a = Template2(self.slides, i)
+            self.a = Template2(self.slides, i, (self.width(), self.height()))
         self.a.show()
         self.hide()
 
 
 class Template1(MainScreen):
-    def __init__(self, slides, number_of_slide):
-        super().__init__(slides)
+    def __init__(self, slides, number_of_slide, size):
+        super().__init__(slides, size)
         self.number_of_slide = number_of_slide
         self.tempinit(number_of_slide)
         for i in self.list_of_buttons:
@@ -273,12 +275,44 @@ class Template1(MainScreen):
 
     def tempinit(self, number_of_slide):
         self.print_title = QtWidgets.QPlainTextEdit(self.slides[number_of_slide].title, self)
-        self.print_title.setGeometry(300, 150, 700,  250)
+        self.print_title.setGeometry(300, 150, 700, 250)
 
         self.print_text = QtWidgets.QPlainTextEdit(self.slides[number_of_slide].text, self)
         self.print_text.setGeometry(300, 450, 700, 200)
 
         self.create_new_slide.clicked.connect(self.new_slide)
+
+        self.delete_button = QPushButton(self)
+        self.delete_button.setText('Удалить этот слайд')
+        self.delete_button.setGeometry(250, 835, 800, 30)
+        self.delete_button.clicked.connect(self.delete_slide)
+
+    def delete_slide(self):
+        del self.slides[self.number_of_slide]
+        if self.number_of_slide < len(self.slides):
+            if self.slides[self.number_of_slide].type == 1:
+                self.a = Template1(self.slides, self.number_of_slide, (self.width(), self.height()))
+                self.a.show()
+                self.hide()
+            if self.slides[self.number_of_slide].type == 2:
+                self.a = Template2(self.slides, self.number_of_slide, (self.width(), self.height()))
+                self.a.show()
+                self.hide()
+        elif len(self.slides) >= 1:
+            self.number_of_slide -= 1
+            if self.slides[self.number_of_slide].type == 1:
+                self.a = Template1(self.slides, self.number_of_slide, (self.width(), self.height()))
+                self.a.show()
+                self.hide()
+            if self.slides[self.number_of_slide].type == 2:
+                self.a = Template2(self.slides, self.number_of_slide, (self.width(), self.height()))
+                self.a.show()
+                self.hide()
+        else:
+            self.a = ChooseTemplate([], (self.width(), self.height()))
+            self.a.show()
+            self.hide()
+
 
     def paintEvent(self, event):
         self.border = QPainter()
@@ -294,7 +328,7 @@ class Template1(MainScreen):
     def new_slide(self):
         self.slides[self.number_of_slide].set_title(self.print_title.toPlainText())
         self.slides[self.number_of_slide].set_text(self.print_text.toPlainText())
-        self.a = ChooseTemplate(self.slides)
+        self.a = ChooseTemplate(self.slides, (self.width(), self.height()))
         self.a.show()
         self.hide()
 
@@ -307,16 +341,16 @@ class Template1(MainScreen):
         print(i)
         print(slide.type)
         if slide.type == 1:
-            self.a = Template1(self.slides, i)
+            self.a = Template1(self.slides, i, (self.width(), self.height()))
         elif slide.type == 2:
-            self.a = Template2(self.slides, i)
+            self.a = Template2(self.slides, i, (self.width(), self.height()))
         self.a.show()
         self.hide()
 
 
 class Template2(MainScreen):
-    def __init__(self, slides, number_of_slide):
-        super().__init__(slides)
+    def __init__(self, slides, number_of_slide, size):
+        super().__init__(slides, size)
         self.number_of_slide = number_of_slide
         self.tempinit(number_of_slide)
         for i in self.list_of_buttons:
@@ -331,6 +365,37 @@ class Template2(MainScreen):
 
         self.create_new_slide.clicked.connect(self.new_slide)
 
+        self.delete_button = QPushButton(self)
+        self.delete_button.setText('Удалить этот слайд')
+        self.delete_button.setGeometry(250, 835, 800, 30)
+        self.delete_button.clicked.connect(self.delete_slide)
+
+    def delete_slide(self):
+        del self.slides[self.number_of_slide]
+        if self.number_of_slide < len(self.slides):
+            if self.slides[self.number_of_slide].type == 1:
+                self.a = Template1(self.slides, self.number_of_slide, (self.width(), self.height()))
+                self.a.show()
+                self.hide()
+            if self.slides[self.number_of_slide].type == 2:
+                self.a = Template2(self.slides, self.number_of_slide, (self.width(), self.height()))
+                self.a.show()
+                self.hide()
+        elif len(self.slides) >= 1:
+            self.number_of_slide -= 1
+            if self.slides[self.number_of_slide].type == 1:
+                self.a = Template1(self.slides, self.number_of_slide, (self.width(), self.height()))
+                self.a.show()
+                self.hide()
+            if self.slides[self.number_of_slide].type == 2:
+                self.a = Template2(self.slides, self.number_of_slide, (self.width(), self.height()))
+                self.a.show()
+                self.hide()
+        else:
+            self.a = ChooseTemplate([], (self.width(), self.height()))
+            self.a.show()
+            self.hide()
+
     def paintEvent(self, event):
         self.border = QPainter()
         self.border.begin(self)
@@ -345,7 +410,7 @@ class Template2(MainScreen):
     def new_slide(self):
         self.slides[self.number_of_slide].set_title(self.print_title.toPlainText())
         self.slides[self.number_of_slide].set_text(self.print_text.toPlainText())
-        self.a = ChooseTemplate(self.slides)
+        self.a = ChooseTemplate(self.slides, (self.width(), self.height()))
         self.a.show()
         self.hide()
 
@@ -358,9 +423,9 @@ class Template2(MainScreen):
         print(i)
         print(slide.type)
         if slide.type == 1:
-            self.a = Template1(self.slides, i)
+            self.a = Template1(self.slides, i, (self.width(), self.height()))
         elif slide.type == 2:
-            self.a = Template2(self.slides, i)
+            self.a = Template2(self.slides, i, (self.width(), self.height()))
         self.a.show()
         self.hide()
 

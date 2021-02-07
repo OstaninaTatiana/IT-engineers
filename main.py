@@ -38,7 +38,7 @@ class GreetingWindow(QtWidgets.QMainWindow):
         self.pushButton.setText('Создать презентацию')
         font = QtGui.QFont()
         font.setFamily('comic sans ms')  # меняет тип шрифта
-        font.setPointSize(28)
+        font.setPointSize(33)
         self.pushButton.setFont(font)
         self.pushButton.setStyleSheet(('''QPushButton {            
                                     background: rgb(184,232,176);
@@ -53,7 +53,7 @@ class GreetingWindow(QtWidgets.QMainWindow):
         self.label.setText('Добро пожаловать!')
         font = QtGui.QFont()
         font.setPointSize(200)
-        self.label.setFont(QtGui.QFont("comic sans ms", 40, QtGui.QFont.Bold))
+        self.label.setFont(QtGui.QFont("comic sans ms", 46, QtGui.QFont.Bold))
         self.label.setStyleSheet("color: rgb(184,232,176);")
         self.label.adjustSize() #???
 
@@ -76,13 +76,13 @@ class GreetingWindow(QtWidgets.QMainWindow):
     def resizing(self):
         print(1)
         self.pushButton.setGeometry(int(0.1606 * self.width()),
-                                    int(0.5625 * self.height()),
+                                    int(0.5000 * self.height()),
                                     int(0.6569 * self.width()),
-                                    int(0.3304 * self.height()))
-        self.label.setGeometry(int(0.2 * self.width()),
-                               int(0.3482 * self.height()),
-                               int(0.6 * self.width()),
-                               int(0.1 * self.height()))
+                                    int(0.3900 * self.height()))
+        self.label.setGeometry(int(0.193 * self.width()),
+                               int(0.065 * self.height()),
+                               int(0.7 * self.width()),
+                               int(0.4 * self.height()))
 
     def resizeEvent(self, event):
         self.resized.emit()
@@ -140,8 +140,8 @@ class MainScreen(QtWidgets.QMainWindow):
             font = QtGui.QFont()
             font.setPointSize(14)
             x.setFont(font)
-            x.setMaximumSize(int(0.1387 * self.width()), int(0.1078 * self.height()))
-            x.setMinimumSize(int(0.1387 * self.width()), int(0.1078 * self.height()))
+            x.setMaximumSize(int(0.1387 * self.width()), int(0.1450 * self.height()))
+            x.setMinimumSize(int(0.1387 * self.width()), int(0.1450 * self.height()))
             x.setText(self.slides[i].title)
             self.list_of_buttons.append(x)
             layout.addWidget(x, i, 0)
@@ -160,8 +160,8 @@ class MainScreen(QtWidgets.QMainWindow):
         font = QtGui.QFont()
         font.setPointSize(50)
         self.create_new_slide.setFont(font)
-        self.create_new_slide.setMaximumSize(int(0.1387 * self.width()), int(0.1078 * self.height()))
-        self.create_new_slide.setMinimumSize(int(0.1387 * self.width()), int(0.1078 * self.height()))
+        self.create_new_slide.setMaximumSize(int(0.1387 * self.width()), int(0.1450 * self.height()))
+        self.create_new_slide.setMinimumSize(int(0.1387 * self.width()), int(0.1450 * self.height()))
         self.create_new_slide.setText('+')
         layout.addWidget(self.create_new_slide, self.number_of_slides, 0)
 
@@ -188,10 +188,11 @@ class MainScreen(QtWidgets.QMainWindow):
         print(1)
 
     def resizing(self):
-        self.pushButton.setGeometry(int(0.0182 * self.width()),
+        self.pushButton.setGeometry(int(0.0250 * self.width()),
                                     int(0.9374 * self.height()),
-                                    int(0.0803 * self.width()),
-                                    int(0.0357 * self.height()))
+                                    int(0.1000 * self.width()),
+                                    int(0.0500 * self.height()),
+                                    )
         self.mw.resize(int(0.1825 * self.width()), int(0.9196 * self.height()))
 
     def resizeEvent(self, event):
@@ -200,16 +201,18 @@ class MainScreen(QtWidgets.QMainWindow):
 
 
 class ChooseTemplate(MainScreen):
+    resized = QtCore.pyqtSignal()
+
     def __init__(self, slides, size):
         super().__init__(slides, size)
         self.tempinit()
 
     def tempinit(self):
+        self.resized.connect(self.resizing1)
         for i in self.list_of_buttons:
             i.clicked.connect(self.to_slide)
 
         self.label = QtWidgets.QLabel(self)
-        self.label.setGeometry(QtCore.QRect(250, 50, 300, 70))
         self.label.setText('Выберите макет слайда')
         font = QtGui.QFont()
         font.setPointSize(60)
@@ -217,27 +220,19 @@ class ChooseTemplate(MainScreen):
         self.label.setStyleSheet("color: rgb(184,232,176);")
         self.label.adjustSize()
 
-        tmp1 = QPushButton("", self)
-        tmp1.setGeometry(225, 200, 400, 300)
-        tmp1.setIcon(QIcon('1.jpg'))
-        tmp1.setIconSize(QSize(400, 300))
-        tmp1.clicked.connect(self.to_template1)
+        self.tmp1 = QPushButton("", self)
+        self.tmp1.setIcon(QIcon('1.jpg'))
+        self.tmp1.clicked.connect(self.to_template1)
 
-        tmp2 = QPushButton("", self)
-        tmp2.setGeometry(675, 200, 400, 300)
-        tmp2.setIcon(QIcon('слайд2.jpg'))
-        tmp2.setIconSize(QSize(400, 300))
-        tmp2.clicked.connect(self.to_template2)
+        self.tmp2 = QPushButton("", self)
+        self.tmp2.setIcon(QIcon('слайд2.jpg'))
+        self.tmp2.clicked.connect(self.to_template2)
 
-        tmp3 = QPushButton("", self)
-        tmp3.setGeometry(225, 550, 400, 300)
-        tmp3.setIcon(QIcon('слайд3.jpg'))
-        tmp3.setIconSize(QSize(400, 300))
+        self.tmp3 = QPushButton("", self)
+        self.tmp3.setIcon(QIcon('слайд3.jpg'))
 
-        tmp4 = QPushButton("", self)
-        tmp4.setGeometry(675, 550, 400, 300)
-        tmp4.setIcon(QIcon('слайд4.jpg'))
-        tmp4.setIconSize(QSize(400, 300))
+        self.tmp4 = QPushButton("", self)
+        self.tmp4.setIcon(QIcon('слайд4.jpg'))
 
     def to_template1(self):
         self.slides.append(Slide(1))
@@ -264,8 +259,41 @@ class ChooseTemplate(MainScreen):
         self.a.show()
         self.hide()
 
+    def resizing1(self):
+        self.label.setGeometry(int(0.3410 * self.width()),
+                               int(0.0714 * self.height()),
+                               int(0.6963 * self.width()),
+                               int(0.1100 * self.height()))
+        self.tmp1.setGeometry(int(0.2670 * self.width()),
+                              int(0.2150 * self.height()),
+                              int(0.2600 * self.width()),
+                              int(0.3500 * self.height()))
+        self.tmp2.setGeometry(int(0.6400 * self.width()),
+                              int(0.2150 * self.height()),
+                              int(0.2600 * self.width()),
+                              int(0.3500 * self.height()))
+        self.tmp3.setGeometry(int(0.2670 * self.width()),
+                              int(0.6072 * self.height()),
+                              int(0.2600* self.width()),
+                              int(0.3500 * self.height()))
+        self.tmp4.setGeometry(int(0.6400 * self.width()),
+                              int(0.6072 * self.height()),
+                              int(0.2600* self.width()),
+                              int(0.3500 * self.height()))
+        self.tmp1.setIconSize(QSize(int(0.365 * self.width()), int(0.3304 * self.height())))
+        self.tmp2.setIconSize(QSize(int(0.365 * self.width()), int(0.3304 * self.height())))
+        self.tmp3.setIconSize(QSize(int(0.365 * self.width()), int(0.3304 * self.height())))
+        self.tmp4.setIconSize(QSize(int(0.365 * self.width()), int(0.3304 * self.height())))
+
+    def resizeEvent(self, event):
+        self.resized.emit()
+        return super().resizeEvent(event)
+
+
+
 
 class Template1(MainScreen):
+    resized = QtCore.pyqtSignal()
     def __init__(self, slides, number_of_slide, size):
         super().__init__(slides, size)
         self.number_of_slide = number_of_slide
@@ -274,6 +302,7 @@ class Template1(MainScreen):
             i.clicked.connect(self.to_slide)
 
     def tempinit(self, number_of_slide):
+        self.resized.connect(self.resizing2)
         self.print_title = QtWidgets.QPlainTextEdit(self.slides[number_of_slide].title, self)
         self.print_title.setGeometry(300, 150, 700, 250)
 
@@ -284,7 +313,6 @@ class Template1(MainScreen):
 
         self.delete_button = QPushButton(self)
         self.delete_button.setText('Удалить этот слайд')
-        self.delete_button.setGeometry(250, 835, 800, 30)
         self.delete_button.clicked.connect(self.delete_slide)
 
     def delete_slide(self):
@@ -323,7 +351,32 @@ class Template1(MainScreen):
     def draw(self, event, border):
         border.setBrush(QColor(184, 232, 176))
         border.setPen(QColor(184, 232, 176))
-        border.drawRoundedRect(250, 100, 800, 700, 50, 50)
+        border.drawRoundedRect(int(0.2336 * self.width()),
+                               int(0.0650 * self.height()),
+                               int(0.7300 * self.width()),
+                               int(0.7950 * self.height()),
+                               int(0.0475 * self.width()),
+                               int(0.0475 * self.height()))
+
+    def resizing2(self):
+        print(1)
+        self.print_title.setGeometry(int(0.2774 * self.width()),
+                                     int(0.1200 * self.height()),
+                                     int(0.6350 * self.width()),
+                                     int(0.1800 * self.height()))
+        self.print_text.setGeometry(int(0.2774 * self.width()),
+                                    int(0.3590 * self.height()),
+                                    int(0.6350 * self.width()),
+                                    int(0.4550 * self.height()))
+        self.delete_button.setGeometry(int(0.4500 * self.width()),
+                                       int(0.9000 * self.height()),
+                                       int(0.2500 * self.width()),
+                                       int(0.0700 * self.height()))
+
+
+    def resizeEvent(self, event):
+        self.resized.emit()
+        return super().resizeEvent(event)
 
     def new_slide(self):
         self.slides[self.number_of_slide].set_title(self.print_title.toPlainText())
@@ -349,6 +402,7 @@ class Template1(MainScreen):
 
 
 class Template2(MainScreen):
+    resized = QtCore.pyqtSignal()
     def __init__(self, slides, number_of_slide, size):
         super().__init__(slides, size)
         self.number_of_slide = number_of_slide
@@ -357,6 +411,7 @@ class Template2(MainScreen):
             i.clicked.connect(self.to_slide)
 
     def tempinit(self, number_of_slide):
+        self.resized.connect(self.resizing3)
         self.print_title = QtWidgets.QPlainTextEdit(self.slides[number_of_slide].title, self)
         self.print_title.setGeometry(300, 150, 700,  150)
 
@@ -405,7 +460,12 @@ class Template2(MainScreen):
     def draw(self, event, border):
         border.setBrush(QColor(184, 232, 176))
         border.setPen(QColor(184, 232, 176))
-        border.drawRoundedRect(250, 100, 800, 700, 50, 50)
+        border.drawRoundedRect(int(0.2336 * self.width()),
+                               int(0.0650 * self.height()),
+                               int(0.7300 * self.width()),
+                               int(0.7950 * self.height()),
+                               int(0.0475 * self.width()),
+                               int(0.0475 * self.height()))
 
     def new_slide(self):
         self.slides[self.number_of_slide].set_title(self.print_title.toPlainText())
@@ -428,6 +488,25 @@ class Template2(MainScreen):
             self.a = Template2(self.slides, i, (self.width(), self.height()))
         self.a.show()
         self.hide()
+
+    def resizing3(self):
+        print(1)
+        self.print_title.setGeometry(int(0.2774 * self.width()),
+                                     int(0.1200 * self.height()),
+                                     int(0.6350 * self.width()),
+                                     int(0.4100 * self.height()))
+        self.print_text.setGeometry(int(0.2774 * self.width()),
+                               int(0.5760 * self.height()),
+                               int(0.6350 * self.width()),
+                               int(0.2400 * self.height()))
+        self.delete_button.setGeometry(int(0.4500 * self.width()),
+                                       int(0.9000 * self.height()),
+                                       int(0.2500 * self.width()),
+                                       int(0.0700 * self.height()))
+
+    def resizeEvent3(self, event):
+        self.resized.emit()
+        return super().resizeEvent(event)
 
 
 if __name__ == '__main__':

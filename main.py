@@ -3,6 +3,7 @@ from PyQt5.QtCore import QSize
 from PyQt5.QtWidgets import QPushButton
 import sys
 from PyQt5.QtGui import QPainter, QColor, QIcon
+from pptx import Presentation
 
 
 class Slide():
@@ -185,7 +186,26 @@ class MainScreen(QtWidgets.QMainWindow):
         qp.drawRect(0, 0, int(0.1825 * self.width()), int(1 * self.height()))
 
     def create_presentation(self):
-        print(1)
+        prs = Presentation()
+        slide1 = prs.slide_layouts[0]
+        slide2 = prs.slide_layouts[1]
+        print(7)
+        slide3 = prs.slide_layouts[1]
+        slide4 = prs.slide_layouts[3]
+        for i in self.slides:
+            if i.type == 1:
+                print(781)
+                slide = prs.slides.add_slide(slide1)
+                print(782)
+                slide.shapes.title.text = i.title
+                print(783)
+                slide.placeholders[1].text = i.text
+                print(78)
+            elif i.type == 2:
+                slide = prs.slides.add_slide(slide2)
+                slide.shapes.title.text = i.title
+                slide.placeholders[1].text = i.text
+        prs.save('test.pptx')
 
     def resizing(self):
         self.pushButton.setGeometry(int(0.0250 * self.width()),
@@ -363,15 +383,16 @@ class Template1(MainScreen):
         self.print_title.setGeometry(int(0.2774 * self.width()),
                                      int(0.1200 * self.height()),
                                      int(0.6350 * self.width()),
-                                     int(0.1800 * self.height()))
+                                     int(0.4100 * self.height()))
         self.print_text.setGeometry(int(0.2774 * self.width()),
-                                    int(0.3590 * self.height()),
+                                    int(0.5760 * self.height()),
                                     int(0.6350 * self.width()),
-                                    int(0.4550 * self.height()))
+                                    int(0.2400 * self.height()))
         self.delete_button.setGeometry(int(0.4500 * self.width()),
                                        int(0.9000 * self.height()),
                                        int(0.2500 * self.width()),
                                        int(0.0700 * self.height()))
+
 
 
     def resizeEvent(self, event):
@@ -494,15 +515,16 @@ class Template2(MainScreen):
         self.print_title.setGeometry(int(0.2774 * self.width()),
                                      int(0.1200 * self.height()),
                                      int(0.6350 * self.width()),
-                                     int(0.4100 * self.height()))
+                                     int(0.1800 * self.height()))
         self.print_text.setGeometry(int(0.2774 * self.width()),
-                               int(0.5760 * self.height()),
-                               int(0.6350 * self.width()),
-                               int(0.2400 * self.height()))
+                                    int(0.3590 * self.height()),
+                                    int(0.6350 * self.width()),
+                                    int(0.4550 * self.height()))
         self.delete_button.setGeometry(int(0.4500 * self.width()),
                                        int(0.9000 * self.height()),
                                        int(0.2500 * self.width()),
                                        int(0.0700 * self.height()))
+
 
     def resizeEvent3(self, event):
         self.resized.emit()

@@ -325,9 +325,15 @@ class Template1(MainScreen):
         self.resized.connect(self.resizing2)
         self.print_title = QtWidgets.QPlainTextEdit(self.slides[number_of_slide].title, self)
         self.print_title.setGeometry(300, 150, 700, 250)
+        font = QtGui.QFont()
+        font.setPointSize(24)
+        self.print_title.setFont(font)
 
         self.print_text = QtWidgets.QPlainTextEdit(self.slides[number_of_slide].text, self)
         self.print_text.setGeometry(300, 450, 700, 200)
+        font = QtGui.QFont()
+        font.setPointSize(18)
+        self.print_text.setFont(font)
 
         self.create_new_slide.clicked.connect(self.new_slide)
 
@@ -435,9 +441,15 @@ class Template2(MainScreen):
         self.resized.connect(self.resizing3)
         self.print_title = QtWidgets.QPlainTextEdit(self.slides[number_of_slide].title, self)
         self.print_title.setGeometry(300, 150, 700,  150)
+        font = QtGui.QFont()
+        font.setPointSize(24)
+        self.print_title.setFont(font)
 
         self.print_text = QtWidgets.QPlainTextEdit(self.slides[number_of_slide].text, self)
         self.print_text.setGeometry(300, 350, 700, 400)
+        font = QtGui.QFont()
+        font.setPointSize(18)
+        self.print_text.setFont(font)
 
         self.create_new_slide.clicked.connect(self.new_slide)
 

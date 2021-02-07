@@ -4,6 +4,7 @@ from PyQt5.QtWidgets import QPushButton
 import sys
 from PyQt5.QtGui import QPainter, QColor, QIcon
 from pptx import Presentation
+from PyQt5.QtWidgets import QFileDialog
 
 
 class Slide():
@@ -119,7 +120,6 @@ class MainScreen(QtWidgets.QMainWindow):
         font = QtGui.QFont()
         font.setPointSize(12)
         self.pushButton.setFont(font)
-        self.pushButton.clicked.connect(self.create_presentation)
         self.pushButton.show()
 
         layout = Qt.QGridLayout(self)
@@ -185,28 +185,6 @@ class MainScreen(QtWidgets.QMainWindow):
         qp.setPen(QColor(0, 0, 0))
         qp.drawRect(0, 0, int(0.1825 * self.width()), int(1 * self.height()))
 
-    def create_presentation(self):
-        prs = Presentation()
-        slide1 = prs.slide_layouts[0]
-        slide2 = prs.slide_layouts[1]
-        print(7)
-        slide3 = prs.slide_layouts[1]
-        slide4 = prs.slide_layouts[3]
-        for i in self.slides:
-            if i.type == 1:
-                print(781)
-                slide = prs.slides.add_slide(slide1)
-                print(782)
-                slide.shapes.title.text = i.title
-                print(783)
-                slide.placeholders[1].text = i.text
-                print(78)
-            elif i.type == 2:
-                slide = prs.slides.add_slide(slide2)
-                slide.shapes.title.text = i.title
-                slide.placeholders[1].text = i.text
-        prs.save('test.pptx')
-
     def resizing(self):
         self.pushButton.setGeometry(int(0.0250 * self.width()),
                                     int(0.9374 * self.height()),
@@ -254,11 +232,36 @@ class ChooseTemplate(MainScreen):
         self.tmp4 = QPushButton("", self)
         self.tmp4.setIcon(QIcon('слайд4.jpg'))
 
+        self.pushButton.clicked.connect(self.create_presentation)
+
     def to_template1(self):
         self.slides.append(Slide(1))
         self.a = Template1(self.slides, len(self.slides) - 1, (self.width(), self.height()))
         self.a.show()
         self.hide()
+
+    def create_presentation(self):
+        prs = Presentation()
+        slide1 = prs.slide_layouts[0]
+        slide2 = prs.slide_layouts[1]
+        print(7)
+        slide3 = prs.slide_layouts[1]
+        slide4 = prs.slide_layouts[3]
+        for i in self.slides:
+            if i.type == 1:
+                print(781)
+                slide = prs.slides.add_slide(slide1)
+                print(782)
+                slide.shapes.title.text = i.title
+                print(783)
+                slide.placeholders[1].text = i.text
+                print(78)
+            elif i.type == 2:
+                slide = prs.slides.add_slide(slide2)
+                slide.shapes.title.text = i.title
+                slide.placeholders[1].text = i.text
+        filename, ok = QFileDialog.getSaveFileName(self, "Сохранить файл", ".", "Презентация(*.pptx)")
+        prs.save(filename)
 
     def to_template2(self):
         self.slides.append(Slide(2))
@@ -341,6 +344,8 @@ class Template1(MainScreen):
         self.delete_button.setText('Удалить этот слайд')
         self.delete_button.clicked.connect(self.delete_slide)
 
+        self.pushButton.clicked.connect(self.create_presentation)
+
     def delete_slide(self):
         del self.slides[self.number_of_slide]
         if self.number_of_slide < len(self.slides):
@@ -367,6 +372,30 @@ class Template1(MainScreen):
             self.a.show()
             self.hide()
 
+    def create_presentation(self):
+        self.slides[self.number_of_slide].set_title(self.print_title.toPlainText())
+        self.slides[self.number_of_slide].set_text(self.print_text.toPlainText())
+        prs = Presentation()
+        slide1 = prs.slide_layouts[0]
+        slide2 = prs.slide_layouts[1]
+        print(7)
+        slide3 = prs.slide_layouts[1]
+        slide4 = prs.slide_layouts[3]
+        for i in self.slides:
+            if i.type == 1:
+                print(781)
+                slide = prs.slides.add_slide(slide1)
+                print(782)
+                slide.shapes.title.text = i.title
+                print(783)
+                slide.placeholders[1].text = i.text
+                print(78)
+            elif i.type == 2:
+                slide = prs.slides.add_slide(slide2)
+                slide.shapes.title.text = i.title
+                slide.placeholders[1].text = i.text
+        filename, ok = QFileDialog.getSaveFileName(self, "Сохранить файл", ".", "Презентация(*.pptx)")
+        prs.save(filename)
 
     def paintEvent(self, event):
         self.border = QPainter()
@@ -458,6 +487,8 @@ class Template2(MainScreen):
         self.delete_button.setGeometry(250, 835, 800, 30)
         self.delete_button.clicked.connect(self.delete_slide)
 
+        self.pushButton.clicked.connect(self.create_presentation)
+
     def delete_slide(self):
         del self.slides[self.number_of_slide]
         if self.number_of_slide < len(self.slides):
@@ -483,6 +514,31 @@ class Template2(MainScreen):
             self.a = ChooseTemplate([], (self.width(), self.height()))
             self.a.show()
             self.hide()
+
+    def create_presentation(self):
+        self.slides[self.number_of_slide].set_title(self.print_title.toPlainText())
+        self.slides[self.number_of_slide].set_text(self.print_text.toPlainText())
+        prs = Presentation()
+        slide1 = prs.slide_layouts[0]
+        slide2 = prs.slide_layouts[1]
+        print(7)
+        slide3 = prs.slide_layouts[1]
+        slide4 = prs.slide_layouts[3]
+        for i in self.slides:
+            if i.type == 1:
+                print(781)
+                slide = prs.slides.add_slide(slide1)
+                print(782)
+                slide.shapes.title.text = i.title
+                print(783)
+                slide.placeholders[1].text = i.text
+                print(78)
+            elif i.type == 2:
+                slide = prs.slides.add_slide(slide2)
+                slide.shapes.title.text = i.title
+                slide.placeholders[1].text = i.text
+        filename, ok = QFileDialog.getSaveFileName(self, "Сохранить файл", ".", "Презентация(*.pptx)")
+        prs.save(filename)
 
     def paintEvent(self, event):
         self.border = QPainter()

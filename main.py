@@ -241,13 +241,18 @@ class ChooseTemplate(MainScreen):
         self.hide()
 
     def create_presentation(self):
+        print('cp1')
         prs = Presentation()
+        print('cp2')
         slide1 = prs.slide_layouts[0]
+        print('cp3')
         slide2 = prs.slide_layouts[1]
         print(7)
         slide3 = prs.slide_layouts[1]
         slide4 = prs.slide_layouts[3]
+        print('cp4')
         for i in self.slides:
+            print('cp5')
             if i.type == 1:
                 print(781)
                 slide = prs.slides.add_slide(slide1)
@@ -260,7 +265,9 @@ class ChooseTemplate(MainScreen):
                 slide = prs.slides.add_slide(slide2)
                 slide.shapes.title.text = i.title
                 slide.placeholders[1].text = i.text
+        print('cp6')
         filename, ok = QFileDialog.getSaveFileName(self, "Сохранить файл", ".", "Презентация(*.pptx)")
+        print('cp7')
         prs.save(filename)
 
     def to_template2(self):

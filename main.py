@@ -5,10 +5,11 @@ import sys
 from PyQt5.QtGui import QPainter, QColor, QIcon
 from pptx import Presentation
 from PyQt5.QtWidgets import QFileDialog
+from PyQt5.QtGui import QPixmap
 
 
 class Slide():
-    def __init__(self, type, title='', text='', picture=''):
+    def __init__(self, type, title='', text='', picture=None):
         self.type = type
         self.text = text
         self.title = title
@@ -228,6 +229,7 @@ class ChooseTemplate(MainScreen):
 
         self.tmp3 = QPushButton("", self)
         self.tmp3.setIcon(QIcon('слайд3.jpg'))
+        self.tmp3.clicked.connect(self.to_template3)
 
         self.tmp4 = QPushButton("", self)
         self.tmp4.setIcon(QIcon('слайд4.jpg'))
@@ -238,6 +240,14 @@ class ChooseTemplate(MainScreen):
         self.slides.append(Slide(1))
         self.a = Template1(self.slides, len(self.slides) - 1, (self.width(), self.height()))
         self.a.show()
+        self.hide()
+
+    def to_template3(self):
+        print('seven')
+        self.slides.append(Slide(3))
+        self.a = Template3(self.slides, len(self.slides) - 1, (self.width(), self.height()))
+        self.a.show()
+        print('sem\'')
         self.hide()
 
     def create_presentation(self):
@@ -318,8 +328,6 @@ class ChooseTemplate(MainScreen):
     def resizeEvent(self, event):
         self.resized.emit()
         return super().resizeEvent(event)
-
-
 
 
 class Template1(MainScreen):
@@ -600,8 +608,177 @@ class Template2(MainScreen):
                                        int(0.2500 * self.width()),
                                        int(0.0700 * self.height()))
 
-
     def resizeEvent3(self, event):
+        self.resized.emit()
+        return super().resizeEvent(event)
+
+
+class Template3(MainScreen):
+    resized = QtCore.pyqtSignal()
+
+    def __init__(self, slides, number_of_slide, size):
+        super().__init__(slides, size)
+        self.number_of_slide = number_of_slide
+        self.tempinit(number_of_slide)
+        for i in self.list_of_buttons:
+            i.clicked.connect(self.to_slide)
+
+    def tempinit(self, number_of_slide):
+        self.resized.connect(self.resizing4)
+        self.print_title = QtWidgets.QPlainTextEdit(self.slides[number_of_slide].title, self)
+        self.print_title.setGeometry(300, 150, 700,  150)
+        font = QtGui.QFont()
+        font.setPointSize(24)
+        self.print_title.setFont(font)
+
+        self.input_picture = QPixmap(self.slides[number_of_slide].picture)
+
+        self.print_picture = QtWidgets.QLabel(self)
+        self.print_picture.setGeometry(300, 350, 700, 400)
+        self.print_picture.setPixmap(self.input_picture)
+
+        self.set_new_picture = QtWidgets.QPushButton(self)
+        self.set_new_picture.setText('Вставить новую картинку')
+        self.set_new_picture.clicked.connect(self.setting_new_picture)
+        self.set_new_picture.setGeometry(int(0.8 * self.width()), int(0.85 * self.height()), int(0.15 * self.width()), int(0.1 * self.height()))
+
+        self.create_new_slide.clicked.connect(self.new_slide)
+
+        self.delete_button = QPushButton(self)
+        self.delete_button.setText('Удалить этот слайд')
+        self.delete_button.setGeometry(250, 835, 800, 30)
+        self.delete_button.clicked.connect(self.delete_slide)
+
+        self.pushButton.clicked.connect(self.create_presentation)
+
+    def setting_new_picture(self):
+        self.fname = QFileDialog.getOpenFileName(self, 'Выбрать картинку', '')[0]
+        self.input_picture = QPixmap(self.fname)
+
+        self.print_picture.setPixmap(self.input_picture)
+
+    def delete_slide(self):
+        del self.slides[self.number_of_slide]
+        if self.number_of_slide < len(self.slides):
+            if self.slides[self.number_of_slide].type == 1:
+                self.a = Template1(self.slides, self.number_of_slide, (self.width(), self.height()))
+                self.a.show()
+                self.hide()
+            if self.slides[self.number_of_slide].type == 2:
+                self.a = Template2(self.slides, self.number_of_slide, (self.width(), self.height()))
+                self.a.show()
+                self.hide()
+            if self.slides[self.number_of_slide].type == 3:
+                self.a = Template3(self.slides, self.number_of_slide, (self.width(), self.height()))
+                self.a.show()
+                self.hide()
+        elif len(self.slides) >= 1:
+            self.number_of_slide -= 1
+            if self.slides[self.number_of_slide].type == 1:
+                self.a = Template1(self.slides, self.number_of_slide, (self.width(), self.height()))
+                self.a.show()
+                self.hide()
+            if self.slides[self.number_of_slide].type == 2:
+                self.a = Template2(self.slides, self.number_of_slide, (self.width(), self.height()))
+                self.a.show()
+                self.hide()
+            if self.slides[self.number_of_slide].type == 3:
+                self.a = Template3(self.slides, self.number_of_slide, (self.width(), self.height()))
+                self.a.show()
+                self.hide()
+        else:
+            self.a = ChooseTemplate([], (self.width(), self.height()))
+            self.a.show()
+            self.hide()
+
+    def create_presentation(self):
+        self.slides[self.number_of_slide].set_title(self.print_title.toPlainText())
+        self.slides[self.number_of_slide].set_picture(self.fname)
+        prs = Presentation()
+        slide1 = prs.slide_layouts[0]
+        slide2 = prs.slide_layouts[1]
+        print(7)
+        slide3 = prs.slide_layouts[1]
+        slide4 = prs.slide_layouts[3]
+        for i in self.slides:
+            if i.type == 1:
+                print(781)
+                slide = prs.slides.add_slide(slide1)
+                print(782)
+                slide.shapes.title.text = i.title
+                print(783)
+                slide.placeholders[1].text = i.text
+                print(78)
+            elif i.type == 2:
+                slide = prs.slides.add_slide(slide2)
+                slide.shapes.title.text = i.title
+                slide.placeholders[1].text = i.text
+            elif i.type == 3:
+                slide = prs.slides.add_slide(slide3)
+                slide.shapes.title.text = i.title
+                slide.placeholders[1].insert_picture = i.picture
+        filename, ok = QFileDialog.getSaveFileName(self, "Сохранить файл", ".", "Презентация(*.pptx)")
+        prs.save(filename)
+
+    def paintEvent(self, event):
+        self.border = QPainter()
+        self.border.begin(self)
+        self.draw(event, self.border)
+        self.border.end()
+
+    def draw(self, event, border):
+        border.setBrush(QColor(184, 232, 176))
+        border.setPen(QColor(184, 232, 176))
+        border.drawRoundedRect(int(0.2336 * self.width()),
+                               int(0.0650 * self.height()),
+                               int(0.7300 * self.width()),
+                               int(0.7950 * self.height()),
+                               int(0.0475 * self.width()),
+                               int(0.0475 * self.height()))
+
+    def new_slide(self):
+        self.slides[self.number_of_slide].set_title(self.print_title.toPlainText())
+        self.slides[self.number_of_slide].set_text(self.print_text.toPlainText())
+        self.a = ChooseTemplate(self.slides, (self.width(), self.height()))
+        self.a.show()
+        self.hide()
+
+    def to_slide(self):
+        self.slides[self.number_of_slide].set_title(self.print_title.toPlainText())
+        self.slides[self.number_of_slide].set_text(self.print_text.toPlainText())
+        sender = self.sender()
+        i = self.list_of_buttons.index(sender)
+        slide = self.slides[i]
+        print(i)
+        print(slide.type)
+        if slide.type == 1:
+            self.a = Template1(self.slides, i, (self.width(), self.height()))
+        elif slide.type == 2:
+            self.a = Template2(self.slides, i, (self.width(), self.height()))
+        self.a.show()
+        self.hide()
+
+    def resizing4(self):
+        print(1)
+        self.print_title.setGeometry(int(0.2774 * self.width()),
+                                     int(0.1200 * self.height()),
+                                     int(0.6350 * self.width()),
+                                     int(0.1800 * self.height()))
+        self.print_picture.setGeometry(int(0.2774 * self.width()),
+                                       int(0.3590 * self.height()),
+                                       int(0.6350 * self.width()),
+                                       int(0.4550 * self.height()))
+
+        self.delete_button.setGeometry(int(0.4500 * self.width()),
+                                       int(0.9000 * self.height()),
+                                       int(0.2500 * self.width()),
+                                       int(0.0700 * self.height()))
+        self.set_new_picture.setGeometry(int(0.8 * self.width()),
+                                         int(0.85 * self.height()),
+                                         int(0.15 * self.width()),
+                                         int(0.1 * self.height()))
+
+    def resizeEvent4(self, event):
         self.resized.emit()
         return super().resizeEvent(event)
 

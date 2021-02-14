@@ -65,19 +65,7 @@ class GreetingWindow(QtWidgets.QMainWindow):
         self.k.show()
         self.hide()
 
-        #print('Hello')
-        #self.presentation = Presentation()
-        #title_slide_layout = self.presentation.slide_layouts[0]
-        #slide = self.presentation.slides.add_slide(title_slide_layout)
-        #title = slide.shapes.title
-        #subtitle = slide.placeholders[1]
-
-        #title.text = "Hello, World!"
-        #subtitle.text = "Презентация создана"
-        #self.presentation.save('Презентация1.pptx')
-
     def resizing(self):
-        print(1)
         self.pushButton.setGeometry(int(0.1606 * self.width()),
                                     int(0.5000 * self.height()),
                                     int(0.6569 * self.width()),
@@ -104,7 +92,6 @@ class MainScreen(QtWidgets.QMainWindow):
 
     def initUI(self):
         self.resized.connect(self.resizing)
-        print(1243564234)
         self.resize(*self.size_of_window)
         self.setWindowTitle('Презентация')
 
@@ -202,18 +189,13 @@ class MainScreen(QtWidgets.QMainWindow):
         prs = Presentation()
         slide1 = prs.slide_layouts[0]
         slide2 = prs.slide_layouts[1]
-        print(7)
         slide3 = prs.slide_layouts[5]
         slide4 = prs.slide_layouts[3]
         for i in self.slides:
             if i.type == 1:
-                print(781)
                 slide = prs.slides.add_slide(slide1)
-                print(782)
                 slide.shapes.title.text = i.title
-                print(783)
                 slide.placeholders[1].text = i.text
-                print(78)
             elif i.type == 2:
                 slide = prs.slides.add_slide(slide2)
                 slide.shapes.title.text = i.title
@@ -221,12 +203,14 @@ class MainScreen(QtWidgets.QMainWindow):
             elif i.type == 3:
                 slide = prs.slides.add_slide(slide3)
                 slide.shapes.title.text = i.title
-                picture = slide.shapes.add_picture(i.picture, 500000, 1600000)
+                if i.picture:
+                    picture = slide.shapes.add_picture(i.picture, 500000, 1600000)
             else:
                 slide = prs.slides.add_slide(slide4)
                 slide.shapes.title.text = i.title
                 slide.placeholders[2].text = i.text
-                picture = slide.shapes.add_picture(i.picture, 500000, 1600000)
+                if i.picture:
+                    picture = slide.shapes.add_picture(i.picture, 500000, 1600000)
         filename, ok = QFileDialog.getSaveFileName(self, "Сохранить файл", ".", "Презентация(*.pptx)")
         prs.save(filename)
 
@@ -234,8 +218,6 @@ class MainScreen(QtWidgets.QMainWindow):
         sender = self.sender()
         i = self.list_of_buttons.index(sender)
         slide = self.slides[i]
-        print(i)
-        print(slide.type)
         if slide.type == 1:
             self.a = Template1(self.slides, i, (self.width(), self.height()))
         elif slide.type == 2:
@@ -436,7 +418,6 @@ class Template1(MainScreen):
                                int(0.0475 * self.height()))
 
     def resizing2(self):
-        print(1)
         self.print_title.setGeometry(int(0.2774 * self.width()),
                                      int(0.1200 * self.height()),
                                      int(0.6350 * self.width()),
@@ -537,7 +518,6 @@ class Template2(MainScreen):
         super().to_slide()
 
     def resizing3(self):
-        print(1)
         self.print_title.setGeometry(int(0.2774 * self.width()),
                                      int(0.1200 * self.height()),
                                      int(0.6350 * self.width()),
@@ -635,7 +615,6 @@ class Template3(MainScreen):
         super().to_slide()
 
     def resizing4(self):
-        print(1)
         self.print_title.setGeometry(int(0.2774 * self.width()),
                                      int(0.1200 * self.height()),
                                      int(0.6350 * self.width()),
@@ -707,7 +686,6 @@ class Template4(MainScreen):
     def setting_new_picture(self):
         self.fname = QFileDialog.getOpenFileName(self, 'Выбрать картинку', '')[0]
         self.input_picture = QPixmap(self.fname)
-
         self.print_picture.setPixmap(self.input_picture)
 
     def create_presentation(self):
@@ -747,7 +725,6 @@ class Template4(MainScreen):
         super().to_slide()
 
     def resizing5(self):
-        print(1)
         self.print_title.setGeometry(int(0.2774 * self.width()),
                                      int(0.1200 * self.height()),
                                      int(0.6350 * self.width()),

@@ -40,7 +40,7 @@ class GreetingWindow(QtWidgets.QMainWindow):
         self.pushButton = QPushButton(self)
         self.pushButton.setText('Создать презентацию')
         font = QtGui.QFont()
-        font.setFamily('comic sans ms')  # меняет тип шрифта
+        font.setFamily('comic sans ms')
         font.setPointSize(33)
         self.pushButton.setFont(font)
         self.pushButton.setStyleSheet(('''QPushButton {            
@@ -58,7 +58,7 @@ class GreetingWindow(QtWidgets.QMainWindow):
         font.setPointSize(200)
         self.label.setFont(QtGui.QFont("comic sans ms", 46, QtGui.QFont.Bold))
         self.label.setStyleSheet("color: rgb(184,232,176);")
-        self.label.adjustSize() #???
+        self.label.adjustSize()
 
     def create_presentation(self):
         self.k = ChooseTemplate([], (self.width(), self.height()))
@@ -104,7 +104,7 @@ class MainScreen(QtWidgets.QMainWindow):
                                     border-color: rgb(49,106,60);
                                     padding: 4px;
                                     color: rgb(255, 255, 255);
-                                }''')   # параметры кнопки
+                                }''')
         font = QtGui.QFont()
         font.setPointSize(12)
         self.pushButton.setFont(font)
@@ -379,19 +379,31 @@ class Template1(MainScreen):
         self.print_title = QtWidgets.QPlainTextEdit(self.slides[number_of_slide].title, self)
         self.print_title.setGeometry(300, 150, 700, 250)
         font = QtGui.QFont()
-        font.setPointSize(24)
+        font.setPointSize(40)
         self.print_title.setFont(font)
 
         self.print_text = QtWidgets.QPlainTextEdit(self.slides[number_of_slide].text, self)
         self.print_text.setGeometry(300, 450, 700, 200)
         font = QtGui.QFont()
-        font.setPointSize(18)
+        font.setPointSize(16)
         self.print_text.setFont(font)
 
         self.create_new_slide.clicked.connect(self.new_slide)
 
         self.delete_button = QPushButton(self)
         self.delete_button.setText('Удалить этот слайд')
+        self.delete_button.setStyleSheet('''QPushButton {            
+                                    background: rgb(255,20,0);
+                                    border-style: outset;
+                                    border-width: px;
+                                    border-radius: 15px;
+                                    border-color: rgb(255,30,0);
+                                    padding: 4px;
+                                    color: rgb(255, 255, 255);
+                                }''')
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        self.delete_button.setFont(font)
         self.delete_button.clicked.connect(self.delete_slide)
 
         self.pushButton.clicked.connect(self.create_presentation)
@@ -426,7 +438,7 @@ class Template1(MainScreen):
                                     int(0.5760 * self.height()),
                                     int(0.6350 * self.width()),
                                     int(0.2400 * self.height()))
-        self.delete_button.setGeometry(int(0.4500 * self.width()),
+        self.delete_button.setGeometry(int(0.4659 * self.width()),
                                        int(0.9000 * self.height()),
                                        int(0.2500 * self.width()),
                                        int(0.0700 * self.height()))
@@ -465,13 +477,13 @@ class Template2(MainScreen):
         self.print_title = QtWidgets.QPlainTextEdit(self.slides[number_of_slide].title, self)
         self.print_title.setGeometry(300, 150, 700,  150)
         font = QtGui.QFont()
-        font.setPointSize(24)
+        font.setPointSize(40)
         self.print_title.setFont(font)
 
         self.print_text = QtWidgets.QPlainTextEdit(self.slides[number_of_slide].text, self)
         self.print_text.setGeometry(300, 350, 700, 400)
         font = QtGui.QFont()
-        font.setPointSize(18)
+        font.setPointSize(16)
         self.print_text.setFont(font)
 
         self.create_new_slide.clicked.connect(self.new_slide)
@@ -479,6 +491,18 @@ class Template2(MainScreen):
         self.delete_button = QPushButton(self)
         self.delete_button.setText('Удалить этот слайд')
         self.delete_button.setGeometry(250, 835, 800, 30)
+        self.delete_button.setStyleSheet('''QPushButton {            
+                                            background: rgb(255,20,0);
+                                            border-style: outset;
+                                            border-width: px;
+                                            border-radius: 15px;
+                                            border-color: rgb(255,30,0);
+                                            padding: 4px;
+                                            color: rgb(255, 255, 255);
+                                        }''')
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        self.delete_button.setFont(font)
         self.delete_button.clicked.connect(self.delete_slide)
 
         self.pushButton.clicked.connect(self.create_presentation)
@@ -526,7 +550,7 @@ class Template2(MainScreen):
                                     int(0.3590 * self.height()),
                                     int(0.6350 * self.width()),
                                     int(0.4550 * self.height()))
-        self.delete_button.setGeometry(int(0.4500 * self.width()),
+        self.delete_button.setGeometry(int(0.4659 * self.width()),
                                        int(0.9000 * self.height()),
                                        int(0.2500 * self.width()),
                                        int(0.0700 * self.height()))
@@ -551,7 +575,7 @@ class Template3(MainScreen):
         self.print_title = QtWidgets.QPlainTextEdit(self.slides[number_of_slide].title, self)
         self.print_title.setGeometry(300, 150, 700,  150)
         font = QtGui.QFont()
-        font.setPointSize(24)
+        font.setPointSize(40)
         self.print_title.setFont(font)
 
         self.fname = self.slides[number_of_slide].picture
@@ -563,14 +587,37 @@ class Template3(MainScreen):
 
         self.set_new_picture = QtWidgets.QPushButton(self)
         self.set_new_picture.setText('Вставить новую картинку')
+        self.set_new_picture.setStyleSheet('''QPushButton {            
+                                                    background: rgb(100,149,237);
+                                                    border-style: outset;
+                                                    border-width: px;
+                                                    border-radius: 15px;
+                                                    border-color: rgb(255,30,0);
+                                                    padding: 4px;
+                                                    color: rgb(255, 255, 255);
+                                                }''')
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.set_new_picture.setFont(font)
         self.set_new_picture.clicked.connect(self.setting_new_picture)
-        self.set_new_picture.setGeometry(int(0.8 * self.width()), int(0.85 * self.height()), int(0.15 * self.width()), int(0.1 * self.height()))
 
         self.create_new_slide.clicked.connect(self.new_slide)
 
         self.delete_button = QPushButton(self)
         self.delete_button.setText('Удалить этот слайд')
         self.delete_button.setGeometry(250, 835, 800, 30)
+        self.delete_button.setStyleSheet('''QPushButton {            
+                                            background: rgb(255,20,0);
+                                            border-style: outset;
+                                            border-width: px;
+                                            border-radius: 15px;
+                                            border-color: rgb(255,30,0);
+                                            padding: 4px;
+                                            color: rgb(255, 255, 255);
+                                        }''')
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        self.delete_button.setFont(font)
         self.delete_button.clicked.connect(self.delete_slide)
 
         self.pushButton.clicked.connect(self.create_presentation)
@@ -624,14 +671,14 @@ class Template3(MainScreen):
                                        int(0.6350 * self.width()),
                                        int(0.4550 * self.height()))
 
-        self.delete_button.setGeometry(int(0.4500 * self.width()),
+        self.delete_button.setGeometry(int(0.4659 * self.width()),
                                        int(0.9000 * self.height()),
                                        int(0.2500 * self.width()),
                                        int(0.0700 * self.height()))
-        self.set_new_picture.setGeometry(int(0.8 * self.width()),
-                                         int(0.85 * self.height()),
-                                         int(0.15 * self.width()),
-                                         int(0.1 * self.height()))
+        self.set_new_picture.setGeometry(int(0.2336 * self.width()),
+                                         int(0.9000 * self.height()),
+                                         int(0.2250 * self.width()),
+                                         int(0.0700 * self.height()))
 
     def resizeEvent4(self, event):
         self.resized.emit()
@@ -653,7 +700,7 @@ class Template4(MainScreen):
         self.print_title = QtWidgets.QPlainTextEdit(self.slides[number_of_slide].title, self)
         self.print_title.setGeometry(300, 150, 700,  150)
         font = QtGui.QFont()
-        font.setPointSize(24)
+        font.setPointSize(40)
         self.print_title.setFont(font)
 
         self.fname = self.slides[number_of_slide].picture
@@ -666,19 +713,42 @@ class Template4(MainScreen):
         self.print_text = QtWidgets.QPlainTextEdit(self.slides[number_of_slide].text, self)
         self.print_text.setGeometry(650, 350, 350, 400)
         font = QtGui.QFont()
-        font.setPointSize(18)
+        font.setPointSize(16)
         self.print_text.setFont(font)
 
         self.set_new_picture = QtWidgets.QPushButton(self)
         self.set_new_picture.setText('Вставить новую картинку')
+        self.set_new_picture.setStyleSheet('''QPushButton {            
+                                                            background: rgb(100,149,237);
+                                                            border-style: outset;
+                                                            border-width: px;
+                                                            border-radius: 15px;
+                                                            border-color: rgb(255,30,0);
+                                                            padding: 4px;
+                                                            color: rgb(255, 255, 255);
+                                                        }''')
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.set_new_picture.setFont(font)
         self.set_new_picture.clicked.connect(self.setting_new_picture)
-        self.set_new_picture.setGeometry(int(0.8 * self.width()), int(0.85 * self.height()), int(0.15 * self.width()), int(0.1 * self.height()))
 
         self.create_new_slide.clicked.connect(self.new_slide)
 
         self.delete_button = QPushButton(self)
         self.delete_button.setText('Удалить этот слайд')
         self.delete_button.setGeometry(250, 835, 800, 30)
+        self.delete_button.setStyleSheet('''QPushButton {            
+                                            background: rgb(255,20,0);
+                                            border-style: outset;
+                                            border-width: px;
+                                            border-radius: 15px;
+                                            border-color: rgb(255,30,0);
+                                            padding: 4px;
+                                            color: rgb(255, 255, 255);
+                                        }''')
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        self.delete_button.setFont(font)
         self.delete_button.clicked.connect(self.delete_slide)
 
         self.pushButton.clicked.connect(self.create_presentation)
@@ -731,17 +801,20 @@ class Template4(MainScreen):
                                      int(0.1800 * self.height()))
         self.print_picture.setGeometry(int(0.2774 * self.width()),
                                        int(0.3590 * self.height()),
-                                       int(0.6350 * self.width()),
+                                       int(0.3175 * self.width()),
                                        int(0.4550 * self.height()))
-
-        self.delete_button.setGeometry(int(0.4500 * self.width()),
+        self.print_text.setGeometry(int(0.5909 * self.width()),
+                                    int(0.3590 * self.height()),
+                                    int(0.3175 * self.width()),
+                                    int(0.4550 * self.height()))
+        self.delete_button.setGeometry(int(0.4659 * self.width()),
                                        int(0.9000 * self.height()),
                                        int(0.2500 * self.width()),
                                        int(0.0700 * self.height()))
-        self.set_new_picture.setGeometry(int(0.8 * self.width()),
-                                         int(0.85 * self.height()),
-                                         int(0.15 * self.width()),
-                                         int(0.1 * self.height()))
+        self.set_new_picture.setGeometry(int(0.2336 * self.width()),
+                                         int(0.9000 * self.height()),
+                                         int(0.2250 * self.width()),
+                                         int(0.0700 * self.height()))
 
     def resizeEvent5(self, event):
         self.resized.emit()

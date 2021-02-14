@@ -204,13 +204,13 @@ class MainScreen(QtWidgets.QMainWindow):
                 slide = prs.slides.add_slide(slide3)
                 slide.shapes.title.text = i.title
                 if i.picture:
-                    picture = slide.shapes.add_picture(i.picture, 500000, 1600000)
+                    picture = slide.shapes.add_picture(i.picture, 500000, 1600000, height=4800000)
             else:
                 slide = prs.slides.add_slide(slide4)
                 slide.shapes.title.text = i.title
                 slide.placeholders[2].text = i.text
                 if i.picture:
-                    picture = slide.shapes.add_picture(i.picture, 500000, 1600000)
+                    picture = slide.shapes.add_picture(i.picture, 500000, 1600000, 4000000)
         filename, ok = QFileDialog.getSaveFileName(self, "Сохранить файл", ".", "Презентация(*.pptx)")
         prs.save(filename)
 

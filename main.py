@@ -293,19 +293,19 @@ class ChooseTemplate(MainScreen):
         self.label.adjustSize()
 
         self.tmp1 = QPushButton("", self)
-        self.tmp1.setIcon(QIcon('1.jpg'))
+        self.tmp1.setIcon(QIcon('Shablon1.jpg'))
         self.tmp1.clicked.connect(self.to_template1)
 
         self.tmp2 = QPushButton("", self)
-        self.tmp2.setIcon(QIcon('слайд2.jpg'))
+        self.tmp2.setIcon(QIcon('Shablon2.jpg'))
         self.tmp2.clicked.connect(self.to_template2)
 
         self.tmp3 = QPushButton("", self)
-        self.tmp3.setIcon(QIcon('слайд3.jpg'))
+        self.tmp3.setIcon(QIcon('Shablon3.jpg'))
         self.tmp3.clicked.connect(self.to_template3)
 
         self.tmp4 = QPushButton("", self)
-        self.tmp4.setIcon(QIcon('слайд4.jpg'))
+        self.tmp4.setIcon(QIcon('Shablon4.jpg'))
         self.tmp4.clicked.connect(self.to_template4)
 
         self.pushButton.clicked.connect(self.create_presentation)

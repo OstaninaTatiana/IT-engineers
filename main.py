@@ -9,7 +9,7 @@ from PyQt5.QtWidgets import QFileDialog
 from PyQt5.QtGui import QPixmap
 
 
-class Slide():
+class Slide:
     def __init__(self, type, title='', text='', picture=None):
         self.type = type
         self.text = text
@@ -163,7 +163,6 @@ class MainScreen(QtWidgets.QMainWindow):
         self.mw.setStyleSheet('background: rgb(95,193,215);')
         self.mw.setGeometry(0, 0, int(0.1825 * self.width()), int(0.9196 * self.height()))
 
-
     def paintEvent(self, event):
         self.qp = QPainter()
         self.qp.begin(self)
@@ -214,13 +213,28 @@ class MainScreen(QtWidgets.QMainWindow):
                     slide.placeholders[2].text = i.text
                     if i.picture:
                         picture = slide.shapes.add_picture(i.picture, 500000, 1600000, 4000000)
+            prs.save(filename)
         else:
             prs = FPDF(orientation='L', unit='mm', format='A4')
             for i in self.slides:
                 prs.add_page()
-                prs.set_font(size=48)
+                prs.set_font('Arial', size=48)
                 prs.cell(297, 25, txt=i.title, ln=1, align="C")
-        prs.save(filename)
+                if i.type == 1:
+                    prs.set_font('Arial', size=24)
+                    prs.cell(280, 150, txt=i.text, ln=1, align="C")
+                if i.type == 2:
+                    prs.set_font('Arial', size=24)
+                    prs.cell(280, 100, txt=i.text, ln=1, align="L")
+                if i.type == 3:
+                    prs.image(i.picture, 10, 35, h=170)
+                if i.type == 4:
+                    prs.set_font('Arial', size=24)
+                    prs.x += 155
+                    prs.cell(140, 100, txt=i.text, ln=1, align="L")
+                    prs.x += 155
+                    prs.image(i.picture, 10, 35, w=130)
+            prs.output(filename)
 
     def to_slide(self):
         sender = self.sender()

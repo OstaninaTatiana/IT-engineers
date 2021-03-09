@@ -4,6 +4,7 @@ from PyQt5.QtWidgets import QPushButton
 import sys
 from PyQt5.QtGui import QPainter, QColor, QIcon
 from pptx import Presentation
+from fpdf import FPDF
 from PyQt5.QtWidgets import QFileDialog
 from PyQt5.QtGui import QPixmap
 
@@ -186,32 +187,39 @@ class MainScreen(QtWidgets.QMainWindow):
         return super().resizeEvent(event)
 
     def create_presentation(self):
-        prs = Presentation()
-        slide1 = prs.slide_layouts[0]
-        slide2 = prs.slide_layouts[1]
-        slide3 = prs.slide_layouts[5]
-        slide4 = prs.slide_layouts[3]
-        for i in self.slides:
-            if i.type == 1:
-                slide = prs.slides.add_slide(slide1)
-                slide.shapes.title.text = i.title
-                slide.placeholders[1].text = i.text
-            elif i.type == 2:
-                slide = prs.slides.add_slide(slide2)
-                slide.shapes.title.text = i.title
-                slide.placeholders[1].text = i.text
-            elif i.type == 3:
-                slide = prs.slides.add_slide(slide3)
-                slide.shapes.title.text = i.title
-                if i.picture:
-                    picture = slide.shapes.add_picture(i.picture, 500000, 1600000, height=4800000)
-            else:
-                slide = prs.slides.add_slide(slide4)
-                slide.shapes.title.text = i.title
-                slide.placeholders[2].text = i.text
-                if i.picture:
-                    picture = slide.shapes.add_picture(i.picture, 500000, 1600000, 4000000)
-        filename, ok = QFileDialog.getSaveFileName(self, "Сохранить файл", ".", "Презентация(*.pptx)")
+        filename, ok = QFileDialog.getSaveFileName(self, "Сохранить файл", ".", "Презентация(*.pptx);;PDF(*.pdf)")
+        if filename.endswith('pptx'):
+            prs = Presentation()
+            slide1 = prs.slide_layouts[0]
+            slide2 = prs.slide_layouts[1]
+            slide3 = prs.slide_layouts[5]
+            slide4 = prs.slide_layouts[3]
+            for i in self.slides:
+                if i.type == 1:
+                    slide = prs.slides.add_slide(slide1)
+                    slide.shapes.title.text = i.title
+                    slide.placeholders[1].text = i.text
+                elif i.type == 2:
+                    slide = prs.slides.add_slide(slide2)
+                    slide.shapes.title.text = i.title
+                    slide.placeholders[1].text = i.text
+                elif i.type == 3:
+                    slide = prs.slides.add_slide(slide3)
+                    slide.shapes.title.text = i.title
+                    if i.picture:
+                        picture = slide.shapes.add_picture(i.picture, 500000, 1600000, height=4800000)
+                else:
+                    slide = prs.slides.add_slide(slide4)
+                    slide.shapes.title.text = i.title
+                    slide.placeholders[2].text = i.text
+                    if i.picture:
+                        picture = slide.shapes.add_picture(i.picture, 500000, 1600000, 4000000)
+        else:
+            prs = FPDF(orientation='L', unit='mm', format='A4')
+            for i in self.slides:
+                prs.add_page()
+                prs.set_font(size=48)
+                prs.cell(297, 25, txt=i.title, ln=1, align="C")
         prs.save(filename)
 
     def to_slide(self):

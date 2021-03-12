@@ -7,6 +7,7 @@ from pptx import Presentation
 from fpdf import FPDF
 from PyQt5.QtWidgets import QFileDialog
 from PyQt5.QtGui import QPixmap
+from PIL import Image
 
 
 class Slide:
@@ -206,13 +207,21 @@ class MainScreen(QtWidgets.QMainWindow):
                     slide = prs.slides.add_slide(slide3)
                     slide.shapes.title.text = i.title
                     if i.picture:
-                        picture = slide.shapes.add_picture(i.picture, 500000, 1600000, height=4800000)
+                        im = Image.open(i.picture)
+                        if im.size[0] / im.size[1] > 80/48:
+                            picture = slide.shapes.add_picture(i.picture, 500000, 1600000, 8000000)
+                        else:
+                            picture = slide.shapes.add_picture(i.picture, 500000, 1600000, height=4800000)
                 else:
                     slide = prs.slides.add_slide(slide4)
                     slide.shapes.title.text = i.title
                     slide.placeholders[2].text = i.text
                     if i.picture:
-                        picture = slide.shapes.add_picture(i.picture, 500000, 1600000, 4000000)
+                        im = Image.open(i.picture)
+                        if im.size[0] / im.size[1] > 40 / 48:
+                            picture = slide.shapes.add_picture(i.picture, 500000, 1600000, 4000000)
+                        else:
+                            picture = slide.shapes.add_picture(i.picture, 500000, 1600000, height=4800000)
             prs.save(filename)
         else:
             prs = FPDF(orientation='L', unit='mm', format='A4')
@@ -227,13 +236,23 @@ class MainScreen(QtWidgets.QMainWindow):
                     prs.set_font('Arial', size=24)
                     prs.cell(280, 100, txt=i.text, ln=1, align="L")
                 if i.type == 3:
-                    prs.image(i.picture, 10, 35, h=170)
+                    if i.picture:
+                        im = Image.open(i.picture)
+                        if im.size[0] / im.size[1] > 26 / 17:
+                            prs.image(i.picture, 10, 35, w=260)
+                        else:
+                            prs.image(i.picture, 10, 35, h=170)
                 if i.type == 4:
                     prs.set_font('Arial', size=24)
                     prs.x += 155
                     prs.cell(140, 100, txt=i.text, ln=1, align="L")
                     prs.x += 155
-                    prs.image(i.picture, 10, 35, w=130)
+                    if i.picture:
+                        im = Image.open(i.picture)
+                        if im.size[0] / im.size[1] > 13 / 17:
+                            prs.image(i.picture, 10, 35, w=130)
+                        else:
+                            prs.image(i.picture, 10, 35, h=170)
             prs.output(filename)
 
     def to_slide(self):

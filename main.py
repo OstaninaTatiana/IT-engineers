@@ -227,13 +227,14 @@ class MainScreen(QtWidgets.QMainWindow):
             prs = FPDF(orientation='L', unit='mm', format='A4')
             for i in self.slides:
                 prs.add_page()
-                prs.set_font('Arial', size=48)
+                prs.add_font('DejaVu', '', 'DejaVuSansCondensed.ttf', uni=True)
+                prs.set_font('DejaVu', '', 48)
                 prs.cell(297, 25, txt=i.title, ln=1, align="C")
                 if i.type == 1:
-                    prs.set_font('Arial', size=24)
+                    prs.set_font('DejaVu', '', size=24)
                     prs.cell(280, 150, txt=i.text, ln=1, align="C")
                 if i.type == 2:
-                    prs.set_font('Arial', size=24)
+                    prs.set_font('DejaVu', '', size=24)
                     prs.cell(280, 100, txt=i.text, ln=1, align="L")
                 if i.type == 3:
                     if i.picture:
@@ -243,7 +244,7 @@ class MainScreen(QtWidgets.QMainWindow):
                         else:
                             prs.image(i.picture, 10, 35, h=170)
                 if i.type == 4:
-                    prs.set_font('Arial', size=24)
+                    prs.set_font('DejaVu', '', size=24)
                     prs.x += 155
                     prs.cell(140, 100, txt=i.text, ln=1, align="L")
                     prs.x += 155

@@ -46,7 +46,7 @@ class GreetingWindow(QtWidgets.QMainWindow):
         font.setPointSize(33)
         self.pushButton.setFont(font)
         self.pushButton.setStyleSheet(('''QPushButton {            
-                                    background: rgb(184,232,176);
+                                    background: rgb(128,211,114);
                                     position: absolute;
                                     border-radius: 70px;
                                     padding: 10px;
@@ -59,8 +59,9 @@ class GreetingWindow(QtWidgets.QMainWindow):
         font = QtGui.QFont()
         font.setPointSize(200)
         self.label.setFont(QtGui.QFont("comic sans ms", 46, QtGui.QFont.Bold))
-        self.label.setStyleSheet("color: rgb(184,232,176);")
+        self.label.setStyleSheet("color: rgb(115,207,99);")
         self.label.adjustSize()
+
 
     def create_presentation(self):
         self.k = ChooseTemplate([], (self.width(), self.height()))
@@ -99,7 +100,7 @@ class MainScreen(QtWidgets.QMainWindow):
 
         self.pushButton = QPushButton('Готово', self)
         self.pushButton.setStyleSheet('''QPushButton {            
-                                    background: rgb(13,174,78);
+                                    background: rgb(115,207,99);
                                     border-style: outset;
                                     border-width: px;
                                     border-radius: 15px;
@@ -108,7 +109,8 @@ class MainScreen(QtWidgets.QMainWindow):
                                     color: rgb(255, 255, 255);
                                 }''')
         font = QtGui.QFont()
-        font.setPointSize(12)
+        font.setFamily('comic sans ms')
+        font.setPointSize(16)
         self.pushButton.setFont(font)
         self.pushButton.show()
 
@@ -330,8 +332,8 @@ class ChooseTemplate(MainScreen):
         self.label.setText('Выберите макет слайда')
         font = QtGui.QFont()
         font.setPointSize(60)
-        self.label.setFont(QtGui.QFont("comic sans ms", 30, QtGui.QFont.Bold))
-        self.label.setStyleSheet("color: rgb(184,232,176);")
+        self.label.setFont(QtGui.QFont("comic sans ms", 40, QtGui.QFont.Bold))
+        self.label.setStyleSheet("color: rgb(115,207,99);")
         self.label.adjustSize()
 
         self.tmp1 = QPushButton("", self)
@@ -444,6 +446,7 @@ class Template1(MainScreen):
                                     color: rgb(255, 255, 255);
                                 }''')
         font = QtGui.QFont()
+        font.setFamily('comic sans ms')
         font.setPointSize(12)
         self.delete_button.setFont(font)
         self.delete_button.clicked.connect(self.delete_slide)
@@ -462,7 +465,7 @@ class Template1(MainScreen):
         self.border.end()
 
     def draw(self, event, border):
-        border.setBrush(QColor(184, 232, 176))
+        border.setBrush(QColor(128,211,114))
         border.setPen(QColor(184, 232, 176))
         border.drawRoundedRect(int(0.2336 * self.width()),
                                int(0.0650 * self.height()),
@@ -543,6 +546,7 @@ class Template2(MainScreen):
                                             color: rgb(255, 255, 255);
                                         }''')
         font = QtGui.QFont()
+        font.setFamily('comic sans ms')
         font.setPointSize(12)
         self.delete_button.setFont(font)
         self.delete_button.clicked.connect(self.delete_slide)
@@ -562,7 +566,7 @@ class Template2(MainScreen):
         self.border.end()
 
     def draw(self, event, border):
-        border.setBrush(QColor(184, 232, 176))
+        border.setBrush(QColor(128,211,114))
         border.setPen(QColor(184, 232, 176))
         border.drawRoundedRect(int(0.2336 * self.width()),
                                int(0.0650 * self.height()),
@@ -639,6 +643,7 @@ class Template3(MainScreen):
                                                     color: rgb(255, 255, 255);
                                                 }''')
         font = QtGui.QFont()
+        font.setFamily('comic sans ms')
         font.setPointSize(10)
         self.set_new_picture.setFont(font)
         self.set_new_picture.clicked.connect(self.setting_new_picture)
@@ -682,7 +687,7 @@ class Template3(MainScreen):
         self.border.end()
 
     def draw(self, event, border):
-        border.setBrush(QColor(184, 232, 176))
+        border.setBrush(QColor(128,211,114))
         border.setPen(QColor(184, 232, 176))
         border.drawRoundedRect(int(0.2336 * self.width()),
                                int(0.0650 * self.height()),
@@ -770,6 +775,7 @@ class Template4(MainScreen):
                                                             color: rgb(255, 255, 255);
                                                         }''')
         font = QtGui.QFont()
+        font.setFamily('comic sans ms')
         font.setPointSize(10)
         self.set_new_picture.setFont(font)
         self.set_new_picture.clicked.connect(self.setting_new_picture)
@@ -789,6 +795,7 @@ class Template4(MainScreen):
                                             color: rgb(255, 255, 255);
                                         }''')
         font = QtGui.QFont()
+        font.setFamily('comic sans ms')
         font.setPointSize(12)
         self.delete_button.setFont(font)
         self.delete_button.clicked.connect(self.delete_slide)
@@ -813,7 +820,7 @@ class Template4(MainScreen):
         self.border.end()
 
     def draw(self, event, border):
-        border.setBrush(QColor(184, 232, 176))
+        border.setBrush(QColor(128,211,114))
         border.setPen(QColor(184, 232, 176))
         border.drawRoundedRect(int(0.2336 * self.width()),
                                int(0.0650 * self.height()),
